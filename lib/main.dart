@@ -13,8 +13,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: Scaffold(),
-        theme: AppTheme.lightTheme
+        home: Scaffold(
+          backgroundColor: Colors.white,
+        ),
+        theme: AppTheme.lightTheme,
     );
   }
 }
