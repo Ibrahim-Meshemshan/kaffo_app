@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';  // مكتبة FontAwesome
 import 'package:kaffo/core/app_theme/app_theme.dart';
 import 'package:kaffo/core/routes_manager/routes_names.dart';
 
@@ -36,60 +37,60 @@ class DrawerScreen extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.home),
+            leading: const FaIcon(FontAwesomeIcons.house, size: 20),
             title: const Text('الرئيسية'),
             onTap: () {
               Navigator.pushNamed(context, RoutesNames.homeBody);
             },
           ),
           ListTile(
-            leading: const Icon(Icons.report_problem),
+            leading: const FaIcon(FontAwesomeIcons.triangleExclamation, size: 20),
             title: const Text('المشكلات'),
             onTap: () {
               Navigator.pushNamed(context, RoutesNames.problems);
             },
           ),
           ListTile(
-            leading: const Icon(Icons.volunteer_activism),
+            leading: const FaIcon(FontAwesomeIcons.handHoldingHeart, size: 20),
             title: const Text('التطوع'),
             onTap: () {
               Navigator.pushNamed(context, RoutesNames.volunteer);
             },
           ),
           ListTile(
-            leading: const Icon(Icons.bar_chart),
+            leading: const FaIcon(FontAwesomeIcons.chartBar, size: 20),
             title: const Text('الاحصائيات'),
             onTap: () {
               Navigator.pushNamed(context, RoutesNames.statistics);
             },
           ),
           ExpansionTile(
-            leading: const Icon(Icons.group),
+            leading: const FaIcon(FontAwesomeIcons.peopleGroup, size: 20),
             title: const Text('مشاركاتي'),
             children: [
               ListTile(
-                leading: const Icon(Icons.report),
+                leading: const FaIcon(FontAwesomeIcons.fileCircleExclamation, size: 20),
                 title: const Text('الشكاوي'),
                 onTap: () {
                   Navigator.pushNamed(context, RoutesNames.myComplaints);
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.favorite),
+                leading: const FaIcon(FontAwesomeIcons.handsHelping, size: 20),
                 title: const Text('التطوع'),
                 onTap: () {
                   Navigator.pushNamed(context, RoutesNames.myVolunteering);
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.handshake),
+                leading: const FaIcon(FontAwesomeIcons.handshake, size: 20),
                 title: const Text('المساهمات'),
                 onTap: () {
                   Navigator.pushNamed(context, RoutesNames.myContributions);
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.card_giftcard),
+                leading: const FaIcon(FontAwesomeIcons.gift, size: 20),
                 title: const Text('التبرعات'),
                 onTap: () {
                   Navigator.pushNamed(context, RoutesNames.myDonations);
@@ -99,7 +100,7 @@ class DrawerScreen extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
-            leading: const Icon(Icons.logout),
+            leading: const FaIcon(FontAwesomeIcons.signOutAlt, size: 20),
             title: const Text('تسجيل الخروج'),
             onTap: () {
               Navigator.pushNamed(context, RoutesNames.logout);
