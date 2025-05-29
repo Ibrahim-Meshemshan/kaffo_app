@@ -20,14 +20,14 @@ class DrawerScreen extends StatelessWidget {
             accountName: Text(
               'إبراهيم مشمشان',
               style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
-                color: AppColors.primaryTextColor,
+                color: AppColors.black,
                 fontSize: 18,
               ),
             ),
             accountEmail: Text(
               'ibrahimeshmeshan@gmail.com',
               style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
-                color: AppColors.primaryTextColor,
+                color: AppColors.black,
                 fontSize: 15,
               ),
             ),

@@ -8,11 +8,11 @@ class AppTheme {
     primaryColor: AppColors.primaryColor,
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.backgroundColor,
-      actionsIconTheme: IconThemeData(color: AppColors.primaryTextColor),
+      actionsIconTheme: IconThemeData(color: AppColors.black),
       titleTextStyle: TextStyle(
         fontSize: 20.0,
         fontWeight: FontWeight.w500,
-        color: AppColors.primaryTextColor,
+        color: AppColors.black,
         fontFamily: AppColors.fontFamily,
       ),
     ),
@@ -20,7 +20,7 @@ class AppTheme {
       titleLarge: TextStyle(
         fontSize: 20.0,
         fontWeight: FontWeight.w500,
-        color: AppColors.primaryTextColor,
+        color: AppColors.black,
         fontFamily: AppColors.fontFamily,
       ),
       titleMedium: TextStyle(
