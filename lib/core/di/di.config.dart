@@ -19,6 +19,8 @@ import '../../feature/app/problems/data/repositories/problems_repo_impl.dart'
     as _i472;
 import '../../feature/app/problems/domain/repositories/problems_repo.dart'
     as _i84;
+import '../../feature/app/problems/domain/use_cases/add_problem_use_case.dart'
+    as _i558;
 import '../../feature/app/problems/domain/use_cases/problems_use_case.dart'
     as _i496;
 import '../../feature/app/problems/presentation/cubit/problems_cubit.dart'
@@ -47,8 +49,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i496.ProblemsUseCase>(
       () => _i496.ProblemsUseCase(repo: gh<_i84.ProblemsRepo>()),
     );
+    gh.factory<_i558.AddProblemUseCase>(
+      () => _i558.AddProblemUseCase(repo: gh<_i84.ProblemsRepo>()),
+    );
     gh.factory<_i578.ProblemsCubit>(
-      () => _i578.ProblemsCubit(problemsUseCase: gh<_i496.ProblemsUseCase>()),
+      () => _i578.ProblemsCubit(
+        problemsUseCase: gh<_i496.ProblemsUseCase>(),
+        addProblemUseCase: gh<_i558.AddProblemUseCase>(),
+      ),
     );
     return this;
   }

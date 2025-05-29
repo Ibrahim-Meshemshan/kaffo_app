@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:kaffo/core/models/result.dart';
 import 'package:kaffo/feature/app/problems/data/data_sources/problems_data_source.dart';
+import 'package:kaffo/feature/app/problems/domain/entities/add_problem_request_entity.dart';
+import 'package:kaffo/feature/app/problems/domain/entities/add_problem_response_entity.dart';
 import 'package:kaffo/feature/app/problems/domain/entities/problems_response_entity.dart';
 import 'package:kaffo/feature/app/problems/domain/repositories/problems_repo.dart';
 
@@ -16,6 +18,15 @@ class ProblemsRepoImpl implements ProblemsRepo {
   Future<Result<List<ProblemsContentEntity>>> fetchProblems() async{
     try {
       return await dataSource.fetchProblems();
+    } on DioException catch (ex) {
+      return Error(ClientError(errorModel: ex.response?.data));
+    }
+  }
+
+  @override
+  Future<Result<AddProblemResponseEntity>> addProblem(AddProblemRequest request) async{
+    try {
+      return await dataSource.addProblem(request);
     } on DioException catch (ex) {
       return Error(ClientError(errorModel: ex.response?.data));
     }
