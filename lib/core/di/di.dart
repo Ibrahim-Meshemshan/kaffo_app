@@ -11,8 +11,3 @@ final getIt = GetIt.instance;
 )
 void configureDependencies() => getIt.init();
 
-@module
-abstract class AppModule {
-  @Named('resetCode')
-  String get resetCode => '';
-}
