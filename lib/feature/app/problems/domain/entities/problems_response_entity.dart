@@ -34,13 +34,13 @@ class ProblemsContentEntity {
   final bool? isReal;
   final bool? forContribution;
   final bool? forDonation;
-  final DateTime? submissionDate;
+  final String? submissionDate;
   final String? status;
   final int? addressId;
   final int? submittedByUserId;
   final int? approvedByUserId;
   final int? categoryId;
-  final String? rejectionReason;
+
 
   ProblemsContentEntity({
     this.id,
@@ -55,7 +55,6 @@ class ProblemsContentEntity {
     this.submittedByUserId,
     this.approvedByUserId,
     this.categoryId,
-    this.rejectionReason,
   });
 
 }

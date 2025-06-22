@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaffo/core/app_colors/colors.dart';
+
 
 class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CommonAppBar({super.key});
@@ -12,7 +12,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: AppColors.appBarColor,
-      title: Text(AppLocalizations.of(context)!.kaffo),
+      title: Text('AppLocalization.of(context)!.kaffo'),
       actions: [
         IconButton(
           icon: const Icon(Icons.notifications_none),

@@ -9,6 +9,7 @@ class AppTheme {
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.backgroundColor,
       actionsIconTheme: IconThemeData(color: AppColors.black),
+
       titleTextStyle: TextStyle(
         fontSize: 20.0,
         fontWeight: FontWeight.w500,
@@ -25,6 +26,12 @@ class AppTheme {
       ),
       titleMedium: TextStyle(
         color: Color(0xFF878787),
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        fontFamily: AppColors.fontFamily,
+      ),
+      bodyMedium: TextStyle(
+        color: AppColors.black,
         fontSize: 14,
         fontWeight: FontWeight.w500,
         fontFamily: AppColors.fontFamily,

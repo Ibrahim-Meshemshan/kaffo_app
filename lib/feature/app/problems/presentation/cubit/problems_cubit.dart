@@ -1,29 +1,30 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart'; // يمكن إزالته على الأرجح إذا لم يتم استخدامه في مكان آخر
 import 'package:injectable/injectable.dart';
 import 'package:kaffo/core/utils/status.dart';
-import 'package:kaffo/feature/app/problems/domain/entities/add_problem_request_entity.dart';
-import 'package:kaffo/feature/app/problems/domain/entities/add_problem_response_entity.dart';
 import 'package:kaffo/feature/app/problems/domain/entities/problems_response_entity.dart';
-import 'package:kaffo/feature/app/problems/domain/use_cases/add_problem_use_case.dart';
 import 'package:kaffo/feature/app/problems/domain/use_cases/problems_use_case.dart';
 
 import '../../../../../core/models/result.dart';
+import '../../data/models/user_id/user_response_dto.dart';
+import '../../domain/entities/user/user_response_entity.dart';
+import '../../domain/use_cases/user_use_case.dart';
 
 part 'problems_state.dart';
 
 @injectable
 class ProblemsCubit extends Cubit<ProblemsState> {
-  ProblemsCubit(
-      {required this.problemsUseCase, required this.addProblemUseCase})
-      : super(ProblemsState());
+  final ProblemsUseCase problemsUseCase;
+  final UserUseCase userUseCase;
 
-  ProblemsUseCase problemsUseCase;
-  AddProblemUseCase addProblemUseCase;
+  ProblemsCubit({
+    required this.problemsUseCase,
+    required this.userUseCase,
+  }) : super(ProblemsState());
 
   Future<void> fetchProblems() async {
     emit(state.copyWith(problemState: Status.loading));
     Result<List<ProblemsContentEntity>> result = await problemsUseCase.call();
-
     switch (result) {
       case Success<List<ProblemsContentEntity>>():
         emit(
@@ -40,23 +41,46 @@ class ProblemsCubit extends Cubit<ProblemsState> {
           ),
         );
     }
-
   }
 
+  Future<void> fetchUser(int userId) async {
+    if (state.usersMap[userId] == null) {
 
-  Future<void> addProblem(AddProblemRequest request) async {
-    emit(state.copyWith(addProblemState: Status.loading));
+      Result<UserResponseDto> result = await userUseCase(userId);
 
-    Result<AddProblemResponseEntity> result = await addProblemUseCase.call(
-        request);
-
-    switch (result) {
-      case Success<AddProblemResponseEntity>():
-        emit(state.copyWith(
-            addProblemState: Status.success, addProblem: result.data));
-      case Error<AddProblemResponseEntity>():
-        emit(state.copyWith(problemState: Status.error,
-            addProblemError: result.exception.toString()));
+      switch (result) {
+        case Success<UserResponseDto>():
+          emit(state.copyWith(
+            usersMap: {...state.usersMap, userId: result.data!},
+            userState: Status.success,
+          ));
+        case Error<UserResponseDto>():
+          print("User fetch error for ID $userId: ${result.exception}");
+          emit(state.copyWith(
+            userState: Status.error,
+            userError: result.exception.toString(),
+          ));
+      }
     }
   }
 }
+  //
+  //
+  // Future<void> addProblem(AddProblemRequest request) async {
+  //   emit(state.copyWith(addProblemState: Status.loading));
+  //
+  //   Result<AddProblemResponseEntity> result = await addProblemUseCase.call(
+  //       request);
+  //
+  //   switch (result) {
+  //     case Success<AddProblemResponseEntity>():
+  //       emit(state.copyWith(
+  //           addProblemState: Status.success, addProblem: result.data));
+  //     case Error<AddProblemResponseEntity>():
+  //       emit(state.copyWith(problemState: Status.error,
+  //           addProblemError: result.exception.toString()));
+  //   }
+  // }
+
+
+

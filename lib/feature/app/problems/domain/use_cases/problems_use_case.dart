@@ -5,11 +5,11 @@ import 'package:kaffo/feature/app/problems/domain/repositories/problems_repo.dar
 
 @injectable
 class ProblemsUseCase {
-  ProblemsRepo repo;
+ final ProblemsRepo _repo;
 
-  ProblemsUseCase({required this.repo});
+  ProblemsUseCase( this._repo);
 
   Future<Result<List<ProblemsContentEntity>>> call() async {
-    return await repo.fetchProblems();
+    return await _repo.fetchProblems();
   }
 }

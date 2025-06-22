@@ -1,40 +1,37 @@
 part of 'problems_cubit.dart';
 
 class ProblemsState {
-  final Status? problemState;
-  final String? problemError;
+  final Status problemState;
   final List<ProblemsContentEntity>? problemList;
+  final String? problemError;
+  final Map<int, UserResponseDto> usersMap;
+  final Status userState;
+  final String? userError;
 
-  final Status? addProblemState;
-  final String? addProblemError;
-  final AddProblemResponseEntity? addProblem;
-
-  const ProblemsState({
-    this.addProblemState = Status.initial,
-    this.addProblemError,
-    this.addProblem,
+  ProblemsState({
     this.problemState = Status.initial,
-    this.problemError,
     this.problemList,
+    this.problemError,
+    this.usersMap = const {},
+    this.userState = Status.initial,
+    this.userError,
   });
 
   ProblemsState copyWith({
     Status? problemState,
-    String? problemError,
     List<ProblemsContentEntity>? problemList,
-    Status? addProblemState,
-    String? addProblemError,
-    AddProblemResponseEntity? addProblem,
+    String? problemError,
+    Map<int, UserResponseDto>? usersMap,
+    Status? userState,
+    String? userError,
   }) {
     return ProblemsState(
       problemState: problemState ?? this.problemState,
-      problemError: problemError ?? this.problemError,
       problemList: problemList ?? this.problemList,
-      addProblemState: addProblemState ?? this.addProblemState,
-      addProblemError: addProblemError ?? this.addProblemError,
-      addProblem: addProblem ?? this.addProblem,
+      problemError: problemError ?? this.problemError,
+      usersMap: usersMap ?? this.usersMap,
+      userState: userState ?? this.userState,
+      userError: userError ?? this.userError,
     );
   }
 }
-
-
