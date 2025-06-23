@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kaffo/core/app_colors/colors.dart';
 import 'package:kaffo/core/app_theme/app_theme.dart';
 import 'package:kaffo/feature/app/problems/domain/entities/problems_response_entity.dart';
 import 'package:kaffo/feature/app/problems/presentation/cubit/problems_cubit.dart';
-// لا نحتاج إلى intl هنا
-
 import '../../../../../core/utils/status.dart';
+
 
 class ProblemCardWidget extends StatefulWidget {
   final ProblemsContentEntity problem;
@@ -25,6 +25,7 @@ class _ProblemCardWidgetState extends State<ProblemCardWidget> {
     super.initState();
     if (widget.problem.submittedByUserId != null) {
       context.read<ProblemsCubit>().fetchUser(widget.problem.submittedByUserId!);
+      context.read<ProblemsCubit>().fetchAddress(widget.problem.submittedByUserId!);
     }
   }
 
@@ -121,15 +122,59 @@ class _ProblemCardWidgetState extends State<ProblemCardWidget> {
                   widget.problem.description ?? 'لا يوجد وصف',
                   style: TextStyle(fontSize: 16,color: Colors.black)
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height*0.12),
+
+                SizedBox(height: 10,),
+
+                BlocBuilder<ProblemsCubit, ProblemsState>(
+                  builder: (context, state) {
+                    final address = state.addressMap[widget.problem
+                        .submittedByUserId];
+                    if (state.addressState == Status.loading) {
+                      return const Center(child: CircularProgressIndicator(),);
+                    } else if (state.addressState == Status.error) {
+                      return Center(child: Text('خطأ: ${state.addressError ??
+                          'غير معروف'}', style: TextStyle(color: Colors.red),));
+                    } else if (state.addressState == Status.success) {
+                      return Row(
+                        children: [
+                          Text(address?.description ?? '',
+                            style: AppTheme.lightTheme.textTheme.titleMedium
+                                ?.copyWith(
+                                color: Colors.black
+                            ),),
+                          SizedBox(width: 10,),
+                          Container(
+                            alignment: Alignment.center,
+                            width: 80,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: AppColors.black,
+                              borderRadius: BorderRadius.circular(5)
+                            ),
+                            child: Text(address?.city ?? '',
+                                textAlign: TextAlign.center ,
+                                style: AppTheme.lightTheme.textTheme.titleMedium
+                                    ?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold
+                                )),
+                          )
+                        ],
+                      );
+                    }
+                    return SizedBox();
+                  },
+                ),
+
+
+                SizedBox(height: 50),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(
-                              'عرض التفاصيل للمشكلة: ${widget.problem.title ?? ''}'),
+                          content: Text('عرض التفاصيل للمشكلة: ${widget.problem.title ?? ''}'),
                         ),
                       );
                     },

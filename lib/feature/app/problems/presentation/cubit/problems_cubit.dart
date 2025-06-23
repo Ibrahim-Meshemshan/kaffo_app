@@ -1,13 +1,12 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/cupertino.dart'; // يمكن إزالته على الأرجح إذا لم يتم استخدامه في مكان آخر
 import 'package:injectable/injectable.dart';
 import 'package:kaffo/core/utils/status.dart';
 import 'package:kaffo/feature/app/problems/domain/entities/problems_response_entity.dart';
+import 'package:kaffo/feature/app/problems/domain/use_cases/address_use_case.dart';
 import 'package:kaffo/feature/app/problems/domain/use_cases/problems_use_case.dart';
-
 import '../../../../../core/models/result.dart';
+import '../../data/models/addresses/address_id_dto.dart';
 import '../../data/models/user_id/user_response_dto.dart';
-import '../../domain/entities/user/user_response_entity.dart';
 import '../../domain/use_cases/user_use_case.dart';
 
 part 'problems_state.dart';
@@ -16,10 +15,11 @@ part 'problems_state.dart';
 class ProblemsCubit extends Cubit<ProblemsState> {
   final ProblemsUseCase problemsUseCase;
   final UserUseCase userUseCase;
-
+final AddressUseCase addressUseCase;
   ProblemsCubit({
     required this.problemsUseCase,
     required this.userUseCase,
+    required this.addressUseCase
   }) : super(ProblemsState());
 
   Future<void> fetchProblems() async {
@@ -45,9 +45,7 @@ class ProblemsCubit extends Cubit<ProblemsState> {
 
   Future<void> fetchUser(int userId) async {
     if (state.usersMap[userId] == null) {
-
       Result<UserResponseDto> result = await userUseCase(userId);
-
       switch (result) {
         case Success<UserResponseDto>():
           emit(state.copyWith(
@@ -63,7 +61,40 @@ class ProblemsCubit extends Cubit<ProblemsState> {
       }
     }
   }
+
+
+
+  Future<void> fetchAddress(int addressId) async {
+    if (state.addressMap[addressId] == null) {
+      Result<AddressIdDto> result = await addressUseCase(addressId);
+      switch (result) {
+        case Success<AddressIdDto>():
+          emit(state.copyWith(
+            addressMap: {...state.addressMap, addressId: result.data!},
+            addressState: Status.success,
+          ));
+        case Error<AddressIdDto>():
+          print("Address fetch error for ID $addressId: ${result.exception}");
+          emit(state.copyWith(
+            addressState: Status.error,
+            addressError: result.exception.toString(),
+          ));
+      }
+    }
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
   //
   //
   // Future<void> addProblem(AddProblemRequest request) async {
