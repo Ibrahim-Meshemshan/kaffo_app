@@ -6,5 +6,6 @@ class ApiConstant {
   static const String baseUrl = 'http://172.23.16.1:8080/api/v1/';
   static const String problems = 'problems';
   static const String userId = 'users/';
+  static const String addresses = 'addresses/';
 
 }

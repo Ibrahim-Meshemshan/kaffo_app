@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:kaffo/core/routes_manager/route_generator.dart';
 import 'package:kaffo/core/routes_manager/routes_names.dart';

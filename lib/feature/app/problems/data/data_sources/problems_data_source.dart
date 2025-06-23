@@ -3,15 +3,13 @@ import 'package:kaffo/core/api_manager/api_manager.dart';
 import 'package:kaffo/core/models/result.dart';
 import 'package:kaffo/feature/app/problems/data/models/user_id/user_response_dto.dart';
 import 'package:kaffo/feature/app/problems/domain/entities/problems_response_entity.dart';
-import 'package:kaffo/feature/app/problems/domain/entities/user/user_response_entity.dart';
-
 import '../../../../../core/api_manager/api_execute.dart';
-import '../../domain/entities/add_problem_request_entity.dart';
-import '../../domain/entities/add_problem_response_entity.dart';
+import '../models/addresses/address_id_dto.dart';
 
 abstract class ProblemsDataSource {
   Future<Result<List<ProblemsContentEntity>>> fetchProblems();
   Future<Result<UserResponseDto>> fetchUsers(int userId);
+  Future<Result<AddressIdDto>> fetchAddress(int addressId);
   // Future<Result<AddProblemResponseEntity>> addProblem(AddProblemRequest request);
 }
 
@@ -32,7 +30,13 @@ class ProblemsDataSourceImpl implements ProblemsDataSource {
   Future<Result<UserResponseDto>> fetchUsers(int userId) async{
     return ApiExecute.executeApi<UserResponseDto>(() async{
       return await _apiClient.fetchUsers(userId);
+    },);
+  }
 
+  @override
+  Future<Result<AddressIdDto>> fetchAddress(int addressId) async{
+    return ApiExecute.executeApi<AddressIdDto>(() async{
+      return await _apiClient.fetchAddress(addressId);
     },);
   }
 
