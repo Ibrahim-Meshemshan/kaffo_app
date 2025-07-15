@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:kaffo/core/models/result.dart';
-import 'package:kaffo/feature/app/problems/domain/entities/problems_response_entity.dart';
+import 'package:kaffo/feature/app/problems/domain/entities/problem/problems_response_entity.dart';
 import 'package:kaffo/feature/app/problems/domain/repositories/problems_repo.dart';
 
 @injectable

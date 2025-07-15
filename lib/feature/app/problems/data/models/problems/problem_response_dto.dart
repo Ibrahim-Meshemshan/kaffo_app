@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:kaffo/feature/app/problems/domain/entities/problems_response_entity.dart';
+import 'package:kaffo/feature/app/problems/domain/entities/problem/problems_response_entity.dart';
 
 part 'problem_response_dto.g.dart';
 

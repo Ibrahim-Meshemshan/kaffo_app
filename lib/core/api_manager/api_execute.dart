@@ -51,6 +51,8 @@ import 'package:dio/dio.dart';
 //     }
 //   }
 // }
+
+
 class ApiExecute {
   static Future<Result<T>> executeApi<T>(Future<T> Function() apiCall) async {
     try {

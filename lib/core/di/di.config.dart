@@ -19,8 +19,14 @@ import '../../feature/app/problems/data/repositories/problems_repo_impl.dart'
     as _i472;
 import '../../feature/app/problems/domain/repositories/problems_repo.dart'
     as _i84;
+import '../../feature/app/problems/domain/use_cases/add_problem_use_case.dart'
+    as _i558;
 import '../../feature/app/problems/domain/use_cases/address_use_case.dart'
     as _i991;
+import '../../feature/app/problems/domain/use_cases/cities_use_case.dart'
+    as _i495;
+import '../../feature/app/problems/domain/use_cases/create_address_use_case.dart'
+    as _i401;
 import '../../feature/app/problems/domain/use_cases/problems_use_case.dart'
     as _i496;
 import '../../feature/app/problems/domain/use_cases/user_use_case.dart'
@@ -51,20 +57,32 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i84.ProblemsRepo>(
       () => _i472.ProblemsRepoImpl(gh<_i296.ProblemsDataSource>()),
     );
+    gh.factory<_i991.AddressUseCase>(
+      () => _i991.AddressUseCase(gh<_i84.ProblemsRepo>()),
+    );
+    gh.factory<_i558.AddProblemUseCase>(
+      () => _i558.AddProblemUseCase(gh<_i84.ProblemsRepo>()),
+    );
+    gh.factory<_i401.CreateAddressUseCase>(
+      () => _i401.CreateAddressUseCase(gh<_i84.ProblemsRepo>()),
+    );
     gh.factory<_i496.ProblemsUseCase>(
       () => _i496.ProblemsUseCase(gh<_i84.ProblemsRepo>()),
     );
     gh.factory<_i504.UserUseCase>(
       () => _i504.UserUseCase(gh<_i84.ProblemsRepo>()),
     );
-    gh.factory<_i991.AddressUseCase>(
-      () => _i991.AddressUseCase(gh<_i84.ProblemsRepo>()),
+    gh.factory<_i495.CitiesUseCase>(
+      () => _i495.CitiesUseCase(gh<_i84.ProblemsRepo>()),
     );
     gh.factory<_i578.ProblemsCubit>(
       () => _i578.ProblemsCubit(
         problemsUseCase: gh<_i496.ProblemsUseCase>(),
         userUseCase: gh<_i504.UserUseCase>(),
         addressUseCase: gh<_i991.AddressUseCase>(),
+        addProblemUseCase: gh<_i558.AddProblemUseCase>(),
+        createAddressUseCase: gh<_i401.CreateAddressUseCase>(),
+        citiesUseCase: gh<_i495.CitiesUseCase>(),
       ),
     );
     return this;
