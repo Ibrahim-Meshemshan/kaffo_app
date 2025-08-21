@@ -5,8 +5,9 @@ import 'package:kaffo/feature/app/problems/data/data_sources/problems_data_sourc
 import 'package:kaffo/feature/app/problems/data/models/addresses/address_response.dart';
 import 'package:kaffo/feature/app/problems/data/models/cities/cities_model.dart';
 import 'package:kaffo/feature/app/problems/data/models/problems/add_problem_response.dart';
+import 'package:kaffo/feature/app/problems/data/models/problems/problem_by_id_model.dart';
 import 'package:kaffo/feature/app/problems/domain/entities/address/address_request.dart';
-import 'package:kaffo/feature/app/problems/domain/entities/problem/problems_response_entity.dart';
+import 'package:kaffo/feature/app/problems/domain/entities/problem/problems_content_entity.dart';
 import 'package:kaffo/feature/app/problems/domain/repositories/problems_repo.dart';
 import '../../../../../core/error_handler/exception_impl.dart';
 import '../../domain/entities/problem/add_problem_request.dart';
@@ -69,6 +70,15 @@ class ProblemsRepoImpl implements ProblemsRepo {
   Future<Result<List<CitiesModel>>> fetchCities() async{
     try {
       return await _dataSource.fetchCities();
+    } on DioException catch (ex) {
+      return Error(ClientError(errorModel: ex.response?.data));
+    }
+  }
+
+  @override
+  Future<Result<ProblemByIdModel>> fetchProblemById(int problemId) async{
+    try {
+      return await _dataSource.fetchProblemById(problemId);
     } on DioException catch (ex) {
       return Error(ClientError(errorModel: ex.response?.data));
     }

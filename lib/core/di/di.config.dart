@@ -27,6 +27,8 @@ import '../../feature/app/problems/domain/use_cases/cities_use_case.dart'
     as _i495;
 import '../../feature/app/problems/domain/use_cases/create_address_use_case.dart'
     as _i401;
+import '../../feature/app/problems/domain/use_cases/problem_by_id.dart'
+    as _i943;
 import '../../feature/app/problems/domain/use_cases/problems_use_case.dart'
     as _i496;
 import '../../feature/app/problems/domain/use_cases/user_use_case.dart'
@@ -63,6 +65,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i558.AddProblemUseCase>(
       () => _i558.AddProblemUseCase(gh<_i84.ProblemsRepo>()),
     );
+    gh.factory<_i495.CitiesUseCase>(
+      () => _i495.CitiesUseCase(gh<_i84.ProblemsRepo>()),
+    );
     gh.factory<_i401.CreateAddressUseCase>(
       () => _i401.CreateAddressUseCase(gh<_i84.ProblemsRepo>()),
     );
@@ -72,8 +77,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i504.UserUseCase>(
       () => _i504.UserUseCase(gh<_i84.ProblemsRepo>()),
     );
-    gh.factory<_i495.CitiesUseCase>(
-      () => _i495.CitiesUseCase(gh<_i84.ProblemsRepo>()),
+    gh.factory<_i943.ProblemByIdUseCase>(
+      () => _i943.ProblemByIdUseCase(gh<_i84.ProblemsRepo>()),
     );
     gh.factory<_i578.ProblemsCubit>(
       () => _i578.ProblemsCubit(
@@ -83,6 +88,7 @@ extension GetItInjectableX on _i174.GetIt {
         addProblemUseCase: gh<_i558.AddProblemUseCase>(),
         createAddressUseCase: gh<_i401.CreateAddressUseCase>(),
         citiesUseCase: gh<_i495.CitiesUseCase>(),
+        problemByIdUseCase: gh<_i943.ProblemByIdUseCase>(),
       ),
     );
     return this;

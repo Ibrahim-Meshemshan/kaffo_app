@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:kaffo/core/app_consts/api_constant.dart';
 import 'package:kaffo/feature/app/problems/data/models/cities/cities_model.dart';
+import 'package:kaffo/feature/app/problems/data/models/problems/problem_by_id_model.dart';
 import 'package:kaffo/feature/app/problems/data/models/user_id/user_response_dto.dart';
 import 'package:kaffo/feature/app/problems/domain/entities/address/address_request.dart';
 import 'package:retrofit/retrofit.dart';
@@ -24,6 +25,9 @@ abstract class RestClient {
 
   @GET('${ApiConstant.addresses}/{addressId}')
   Future<AddressResponse> fetchAddress(@Path('addressId') int addressId);
+
+  @GET('${ApiConstant.problems}/{problemId}')
+  Future<ProblemByIdModel> fetchProblemById(@Path('problemId') int problemId);
 
   @POST(ApiConstant.problems)
   Future<AddProblemResponse> addProblem(@Body() AddProblemRequest body);

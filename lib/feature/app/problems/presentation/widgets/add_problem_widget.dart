@@ -1,65 +1,262 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:kaffo/feature/app/problems/domain/entities/problem/add_problem_request.dart';
-import 'package:kaffo/feature/app/problems/domain/entities/address/address_request.dart';
 import 'package:kaffo/feature/app/problems/presentation/cubit/problems_cubit.dart';
 import 'package:kaffo/core/app_colors/colors.dart';
 import 'package:kaffo/core/app_theme/app_theme.dart';
-import 'package:kaffo/core/utils/status.dart';
+import '../../../../../core/utils/status.dart';
+import '../../data/models/problems/problem_by_id_model.dart';
+import 'add_problem_dialog.dart';
 
-import '../../../../../core/models/result.dart';
-import '../../data/models/addresses/address_response.dart';
-import '../../data/models/cities/cities_model.dart';
 
-final Completer<GoogleMapController> _mapController = Completer();
+String formattedDate = '2025/07/16';
 
-class AddProblemWidget extends StatelessWidget {
+class AddProblemWidget extends StatefulWidget {
   const AddProblemWidget({super.key});
 
   @override
+  State<AddProblemWidget> createState() => _AddProblemWidgetState();
+}
+
+class _AddProblemWidgetState extends State<AddProblemWidget> {
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       children: [
-        InkWell(
-          onTap: () => _showAddProblemDialog(context),
-          child: Container(
-            alignment: Alignment.center,
-            height: 35,
-            width: 100,
-            decoration: BoxDecoration(
-              color: AppColors.black,
-              borderRadius: BorderRadius.circular(25),
-            ),
-            child: Text(
-              '+ مشكلة جديدة',
-              style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
-                color: Colors.white,
+        Row(
+          children: [
+            InkWell(
+              onTap: () => _showAddProblemDialog(context),
+              child: Container(
+                alignment: Alignment.center,
+                height: 35,
+                width: 100,
+                decoration: BoxDecoration(
+                  color: AppColors.black,
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: Text(
+                  '+ مشكلة جديدة',
+                  style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+                    color: Colors.white,
+                  ),
+                ),
               ),
             ),
-          ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: TextField(
+                controller: _searchController,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  hintText: 'ابحث عن مشكلة بالعنوان (مثال: مشكلة الاختبار)...',
+                  prefixIcon: const Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25),
+                    borderSide: BorderSide.none,
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                  contentPadding: const EdgeInsets.symmetric(vertical: 5),
+                ),
+                onSubmitted: (value) {
+                  _searchProblemByTitle(context, value);
+                },
+              ),
+            ),
+          ],
         ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: TextField(
-            decoration: InputDecoration(
-              hintText: 'ابحث عن مشكلة...',
-              prefixIcon: const Icon(Icons.search),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(25),
-                borderSide: BorderSide.none,
-              ),
-              filled: true,
-              fillColor: Colors.grey[200],
-              contentPadding: const EdgeInsets.symmetric(vertical: 5),
-            ),
-          ),
+        const SizedBox(height: 20),
+        BlocBuilder<ProblemsCubit, ProblemsState>(
+          builder: (context, state) {
+            if (state.problemByIdState == Status.loading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state.problemByIdState == Status.error) {
+              return Center(child: Text('خطأ: ${state.problemByIdError ?? 'غير معروف'}'));
+            } else if (state.problemByIdState == Status.success && state.problemByIdList != null) {
+              final ProblemByIdModel problem = state.problemByIdList!;
+              final user = state.usersMap[problem.submittedByUserId];
+              final address = state.addressMap[problem.submittedByUserId];
+
+              return Card(
+                margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 4,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.25,
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                        color: Colors.grey[300],
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.image_outlined,
+                          size: 60,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (user != null)
+                            Row(
+                              children: [
+                                Text(
+                                  '${user.firstName ?? 'مستخدم'} ${user.lastName ?? 'غير معروف'}',
+                                  style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Text(
+                                  formattedDate,
+                                  style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ],
+                            )
+                          else
+                            Text(
+                              'مستخدم غير معروف',
+                              style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          const SizedBox(height: 5),
+                          Text(
+                            problem.title ?? 'لا يوجد عنوان',
+                            style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: Colors.black
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                              problem.description ?? 'لا يوجد وصف',
+                              style: const TextStyle(fontSize: 16, color: Colors.black)
+                          ),
+
+                          const SizedBox(height: 10),
+
+                          if (address != null)
+                            Row(
+                              children: [
+                                Text(
+                                  address.description ?? '',
+                                  style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+                                      color: Colors.black
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Container(
+                                  alignment: Alignment.center,
+                                  width: 80,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                      color: AppColors.black,
+                                      borderRadius: BorderRadius.circular(5)
+                                  ),
+                                  child: Text(
+                                      address.city ?? '',
+                                      textAlign: TextAlign.center,
+                                      style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold
+                                      )
+                                  ),
+                                )
+                              ],
+                            )
+                          else
+                            const SizedBox(),
+
+                          const SizedBox(height: 50),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('عرض التفاصيل للمشكلة: ${problem.title ?? ''}'),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.black,
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                              ),
+                              child: const Text(
+                                'المزيد من التفاصيل',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+            return const Center();
+          },
         ),
       ],
     );
+  }
+
+  void _searchProblemByTitle(BuildContext context, String query) {
+    if (query.isNotEmpty) {
+
+      int? problemIdToSearch;
+      if (query.toLowerCase().contains('اختبار')) {
+        problemIdToSearch = 51;
+      } else if (query.toLowerCase().contains('صيانة')) {
+        problemIdToSearch = 52;
+      }
+
+
+      if (problemIdToSearch != null) {
+
+        context.read<ProblemsCubit>().fetchProblemById(problemIdToSearch);
+        _searchController.clear();
+      } else {
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('لم يتم العثور على مشكلة بهذا العنوان في البيانات التجريبية.'),
+          ),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('الرجاء إدخال نص للبحث عن مشكلة.'),
+        ),
+      );
+    }
   }
 }
 
@@ -73,299 +270,4 @@ void _showAddProblemDialog(BuildContext context) {
       );
     },
   );
-}
-
-class AddProblemDialog extends StatefulWidget {
-  const AddProblemDialog({super.key});
-
-  @override
-  State<AddProblemDialog> createState() => _AddProblemDialogState();
-}
-
-class _AddProblemDialogState extends State<AddProblemDialog> {
-  final _formKey = GlobalKey<FormState>();
-  String? _problemTitle;
-  String? _problemDescription;
-  String? _selectedCityId;
-  String? _addressInput;
-  LatLng? _selectedLocation;
-  Set<Marker> _markers = {};
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ProblemsCubit>().fetchCities();
-    });
-  }
-
-  Future<void> _getCurrentLocation() async {
-    try {
-      // 1. التحقق من صلاحيات الموقع
-      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('الرجاء تفعيل خدمة الموقع')),
-        );
-        return;
-      }
-
-      // 2. طلب الصلاحيات
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('تم رفض صلاحيات الموقع')),
-          );
-          return;
-        }
-      }
-
-      if (permission == LocationPermission.deniedForever) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('الصلاحيات مرفوضة بشكل دائم، يرجى تمكينها من إعدادات الجهاز')),
-        );
-        return;
-      }
-
-      // 3. جلب الموقع الحالي
-      final position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-
-      setState(() {
-        _selectedLocation = LatLng(position.latitude, position.longitude);
-      });
-
-      // 4. تحديث الخريطة
-      final mapController = await _mapController.future;
-      await mapController.animateCamera(
-        CameraUpdate.newLatLngZoom(_selectedLocation!, 15),
-      );
-
-      // إضافة علامة على الموقع المحدد
-      setState(() {
-        _markers = {
-          Marker(
-            markerId: const MarkerId('current_location'),
-            position: _selectedLocation!,
-            infoWindow: const InfoWindow(title: 'موقع المشكلة'),
-          ),
-        };
-      });
-
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('فشل في الحصول على الموقع: ${e.toString()}')),
-      );
-    }
-  }
-
-  Future<void> _submitProblem() async {
-    if (!_formKey.currentState!.validate()) return;
-    if (_selectedLocation == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('الرجاء تحديد الموقع على الخريطة')),
-      );
-      return;
-    }
-
-    final cubit = context.read<ProblemsCubit>();
-
-    // 1. Create Address
-    final addressRequest = AddressRequest(
-      description: _addressInput!,
-      city: _selectedCityId,
-      latitude: _selectedLocation!.latitude,
-      longitude: _selectedLocation!.longitude,
-    );
-
-    final addressResult = await cubit.createAddressUseCase.call(addressRequest);
-
-    if (addressResult is! Success<AddressResponse>) {
-      print('Address creation result: $addressResult');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('حدث خطأ في إنشاء العنوان')),
-      );
-      return;
-    }
-
-    // 2. Create Problem
-    final problemRequest = AddProblemRequest(
-      title: _problemTitle!,
-      description: _problemDescription!,
-      categoryId: 1, // Default valuepa
-      addressId: addressResult.data!.id,
-    );
-
-    final problemResult = await cubit.addProblem(problemRequest, addressResult.data!);
-
-    if (problemRequest == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('تم إضافة المشكلة بنجاح')),
-      );
-      Navigator.pop(context);
-    }
-    Navigator.pop(context);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final cubit = context.watch<ProblemsCubit>();
-    final citiesState = cubit.state.citiesState;
-    final citiesList = cubit.state.citiesList;
-
-    return AlertDialog(
-      title: const Text('إنشاء مشكلة جديدة', textAlign: TextAlign.right),
-      contentPadding: EdgeInsets.zero,
-      content: Container(
-        width: MediaQuery.of(context).size.width * 0.8,
-        padding: const EdgeInsets.all(24.0),
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                _buildProblemTitleField(),
-                const SizedBox(height: 16),
-                _buildProblemDescriptionField(),
-                const SizedBox(height: 16),
-                _buildCityDropdown(citiesState, citiesList),
-                const SizedBox(height: 16),
-                _buildAddressField(),
-                const SizedBox(height: 24),
-                _buildMapSection(),
-              ],
-            ),
-          ),
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('إلغاء'),
-        ),
-        ElevatedButton(
-          onPressed: _submitProblem,
-          child: const Text('رفع المشكلة'),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildProblemTitleField() {
-    return TextFormField(
-      textAlign: TextAlign.right,
-      decoration: const InputDecoration(
-        labelText: 'المشكلة',
-        hintText: 'وصف المشكلة',
-        border: OutlineInputBorder(),
-      ),
-      validator: (value) => value?.isEmpty ?? true ? 'هذا الحقل مطلوب' : null,
-      onChanged: (value) => _problemTitle = value,
-    );
-  }
-
-  Widget _buildProblemDescriptionField() {
-    return TextFormField(
-      textAlign: TextAlign.right,
-      decoration: const InputDecoration(
-        labelText: 'المزيد من التفاصيل',
-        hintText: 'تفاصيل المشكلة',
-        border: OutlineInputBorder(),
-      ),
-      maxLines: 3,
-      validator: (value) => value?.isEmpty ?? true ? 'هذا الحقل مطلوب' : null,
-      onChanged: (value) => _problemDescription = value,
-    );
-  }
-
-  Widget _buildCityDropdown(Status citiesState, List<CitiesModel>? citiesList) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        const Text('المحافظة', style: TextStyle(fontSize: 12)),
-        const SizedBox(height: 4),
-        if (citiesState == Status.loading)
-          const CircularProgressIndicator()
-        else if (citiesState == Status.error)
-          const Text('حدث خطأ في جلب البيانات', style: TextStyle(color: Colors.red))
-        else
-          DropdownButtonFormField<String>(
-            decoration: const InputDecoration(
-              hintText: 'اختر المحافظة',
-              border: OutlineInputBorder(),
-            ),
-            isExpanded: true,
-            items: citiesList?.map((city) => DropdownMenuItem(
-              value: city.value,
-              child: Text(city.arabic ?? ''),
-            )).toList(),
-            onChanged: (value) => _selectedCityId = value,
-            validator: (value) => value == null ? 'هذا الحقل مطلوب' : null,
-          ),
-      ],
-    );
-  }
-
-  Widget _buildAddressField() {
-    return TextFormField(
-      textAlign: TextAlign.right,
-      decoration: const InputDecoration(
-        labelText: 'عنوان المشكلة',
-        hintText: 'ادخل العنوان التفصيلي',
-        border: OutlineInputBorder(),
-      ),
-      validator: (value) => value?.isEmpty ?? true ? 'هذا الحقل مطلوب' : null,
-      onChanged: (value) => _addressInput = value,
-    );
-  }
-
-  Widget _buildMapSection() {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      padding: const EdgeInsets.all(8),
-      child: Column(
-        children: [
-          const Text('الموقع على الخريطة', style: TextStyle(fontSize: 16)),
-          const SizedBox(height: 10),
-          ElevatedButton.icon(
-            onPressed: _getCurrentLocation,
-            icon: const Icon(Icons.location_on),
-            label: const Text('استخدام موقعي الحالي'),
-          ),
-          const SizedBox(height: 10),
-          SizedBox(
-            height: 200,
-            child: GoogleMap(
-              initialCameraPosition: const CameraPosition(
-                target: LatLng(33.5130, 36.2919),
-                zoom: 11.0,
-              ),
-              onMapCreated: (controller) => _mapController.complete(controller),
-              onTap: (latLng) {
-                setState(() {
-                  _selectedLocation = latLng;
-                  _markers = {
-                    Marker(
-                      markerId: const MarkerId('selected_location'),
-                      position: latLng,
-                      infoWindow: const InfoWindow(title: 'موقع المشكلة'),
-                    ),
-                  };
-                });
-              },
-              markers: _markers,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
