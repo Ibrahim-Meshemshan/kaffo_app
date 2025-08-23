@@ -10,6 +10,7 @@ import 'package:kaffo/feature/app/volunteering/presentation/pages/volunteering_s
 import 'package:kaffo/feature/auth/logout/presentation/pages/logout_screen.dart';
 
 import '../../feature/app/home/presentation/pages/home_body_screen.dart';
+import '../di/di.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoutes(RouteSettings settings) {

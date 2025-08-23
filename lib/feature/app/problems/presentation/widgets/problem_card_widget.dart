@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaffo/core/app_colors/colors.dart';
 import 'package:kaffo/core/app_theme/app_theme.dart';
-import 'package:kaffo/feature/app/problems/domain/entities/problems_response_entity.dart';
+import 'package:kaffo/feature/app/problems/domain/entities/problem/problems_content_entity.dart';
 import 'package:kaffo/feature/app/problems/presentation/cubit/problems_cubit.dart';
 import '../../../../../core/utils/status.dart';
 
