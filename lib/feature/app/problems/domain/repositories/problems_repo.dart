@@ -10,17 +10,17 @@ import '../entities/problem/add_problem_request.dart';
 import '../entities/problem/problems_content_entity.dart';
 
 abstract class ProblemsRepo {
-  Future<Result<List<ProblemsContentEntity>>> fetchProblems();
+  Future<ApiResult<List<ProblemsContentEntity>>> fetchProblems();
 
-  Future<Result<UserResponseDto>> fetchUsers(int userId);
+  Future<ApiResult<UserResponseDto>> fetchUsers(int userId);
 
-  Future<Result<AddressResponse>> fetchAddress(int addressId);
+  Future<ApiResult<AddressResponse>> fetchAddress(int addressId);
 
-  Future<Result<AddProblemResponse>> addProblem(AddProblemRequest request);
+  Future<ApiResult<AddProblemResponse>> addProblem(AddProblemRequest request);
 
-  Future<Result<AddressResponse>> createAddress(AddressRequest request);
+  Future<ApiResult<AddressResponse>> createAddress(AddressRequest request);
 
-  Future<Result<List<CitiesModel>>> fetchCities();
+  Future<ApiResult<List<CitiesModel>>> fetchCities();
 
-  Future<Result<ProblemByIdModel>> fetchProblemById(int problemId);
+  Future<ApiResult<ProblemByIdModel>> fetchProblemById(int problemId);
 }

@@ -18,9 +18,8 @@
         android:icon="@mipmap/ic_launcher">
 
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAyWugrmsnX3qIRF97TRnIAUFjITNqusK4"/> <!-- ضع مفتاحك هنا -->
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAyWugrmsnX3qIRF97TRnIAUFjITNqusK4"/><!-- ضع مفتاحك هنا -->
 
         <!-- android:usesCleartextTraffic="true" يمكن تفعيله إذا احتجت لاحقاً -->
 

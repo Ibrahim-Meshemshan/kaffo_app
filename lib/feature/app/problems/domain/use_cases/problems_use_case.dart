@@ -9,7 +9,7 @@ class ProblemsUseCase {
 
   ProblemsUseCase( this._repo);
 
-  Future<Result<List<ProblemsContentEntity>>> call() async {
+  Future<ApiResult<List<ProblemsContentEntity>>> call() async {
     return await _repo.fetchProblems();
   }
 }

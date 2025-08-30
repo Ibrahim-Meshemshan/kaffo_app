@@ -10,7 +10,7 @@ class CitiesUseCase {
 
   CitiesUseCase( this._repo);
 
-  Future<Result<List<CitiesModel>>> call() async {
+  Future<ApiResult<List<CitiesModel>>> call() async {
     return await _repo.fetchCities();
   }
 }

@@ -10,7 +10,7 @@ class AddProblemUseCase {
 
   AddProblemUseCase( this._repo);
 
-  Future<Result<AddProblemResponse>> call(AddProblemRequest request) async {
+  Future<ApiResult<AddProblemResponse>> call(AddProblemRequest request) async {
     return await _repo.addProblem(request);
   }
 }

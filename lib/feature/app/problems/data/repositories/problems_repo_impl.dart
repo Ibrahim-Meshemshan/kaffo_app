@@ -21,66 +21,66 @@ class ProblemsRepoImpl implements ProblemsRepo {
 
 
   @override
-  Future<Result<List<ProblemsContentEntity>>> fetchProblems() async{
+  Future<ApiResult<List<ProblemsContentEntity>>> fetchProblems() async{
     try {
       return await _dataSource.fetchProblems();
     } on DioException catch (ex) {
-      return Error(ClientError(errorModel: ex.response?.data));
+      return ApiErrorResult(ClientError(errorModel: ex.response?.data));
     }
   }
 
   @override
-  Future<Result<UserResponseDto>> fetchUsers(int userId) async{
+  Future<ApiResult<UserResponseDto>> fetchUsers(int userId) async{
     try {
       return await _dataSource.fetchUsers(userId);
     } on DioException catch (ex) {
-      return Error(ClientError(errorModel: ex.response?.data));
+      return ApiErrorResult(ClientError(errorModel: ex.response?.data));
     }
   }
 
   @override
-  Future<Result<AddressResponse>> fetchAddress(int addressId) async {
+  Future<ApiResult<AddressResponse>> fetchAddress(int addressId) async {
     try {
       return await _dataSource.fetchAddress(addressId);
     } on DioException catch (ex) {
-      return Error(ClientError(errorModel: ex.response?.data));
+      return ApiErrorResult(ClientError(errorModel: ex.response?.data));
     }
   }
 
  @override
- Future<Result<AddProblemResponse>> addProblem(
+ Future<ApiResult<AddProblemResponse>> addProblem(
      AddProblemRequest request) async {
    try {
      return await _dataSource.addProblem(request);
    } on DioException catch (ex) {
-     return Error(ClientError(errorModel: ex.response?.data));
+     return ApiErrorResult(ClientError(errorModel: ex.response?.data));
    }
  }
 
  @override
- Future<Result<AddressResponse>> createAddress(AddressRequest request) async {
+ Future<ApiResult<AddressResponse>> createAddress(AddressRequest request) async {
    try {
      return await _dataSource.createAddress(request);
    } on DioException catch (ex) {
-     return Error(ClientError(errorModel: ex.response?.data));
+     return ApiErrorResult(ClientError(errorModel: ex.response?.data));
    }
  }
 
   @override
-  Future<Result<List<CitiesModel>>> fetchCities() async{
+  Future<ApiResult<List<CitiesModel>>> fetchCities() async{
     try {
       return await _dataSource.fetchCities();
     } on DioException catch (ex) {
-      return Error(ClientError(errorModel: ex.response?.data));
+      return ApiErrorResult(ClientError(errorModel: ex.response?.data));
     }
   }
 
   @override
-  Future<Result<ProblemByIdModel>> fetchProblemById(int problemId) async{
+  Future<ApiResult<ProblemByIdModel>> fetchProblemById(int problemId) async{
     try {
       return await _dataSource.fetchProblemById(problemId);
     } on DioException catch (ex) {
-      return Error(ClientError(errorModel: ex.response?.data));
+      return ApiErrorResult(ClientError(errorModel: ex.response?.data));
     }
   }
 

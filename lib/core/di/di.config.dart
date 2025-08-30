@@ -74,11 +74,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i496.ProblemsUseCase>(
       () => _i496.ProblemsUseCase(gh<_i84.ProblemsRepo>()),
     );
-    gh.factory<_i504.UserUseCase>(
-      () => _i504.UserUseCase(gh<_i84.ProblemsRepo>()),
-    );
     gh.factory<_i943.ProblemByIdUseCase>(
       () => _i943.ProblemByIdUseCase(gh<_i84.ProblemsRepo>()),
+    );
+    gh.factory<_i504.UserUseCase>(
+      () => _i504.UserUseCase(gh<_i84.ProblemsRepo>()),
     );
     gh.factory<_i578.ProblemsCubit>(
       () => _i578.ProblemsCubit(

@@ -54,13 +54,13 @@ import 'package:dio/dio.dart';
 
 
 class ApiExecute {
-  static Future<Result<T>> executeApi<T>(Future<T> Function() apiCall) async {
+  static Future<ApiResult<T>> executeApi<T>(Future<T> Function() apiCall) async {
     try {
       var result = await apiCall.call();
-      return Success(result);
+      return ApiSuccessResult(result);
     } catch (error) {
       final exception = ErrorHandler.handleError(error);
-      return Error(exception);
+      return ApiErrorResult(exception);
     }
   }
 }

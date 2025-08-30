@@ -9,7 +9,7 @@ class UserUseCase {
 
   UserUseCase( this._repo);
 
-  Future<Result<UserResponseDto>> call(int userId) async {
+  Future<ApiResult<UserResponseDto>> call(int userId) async {
     return await _repo.fetchUsers(userId);
   }
 }

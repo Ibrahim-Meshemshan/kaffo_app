@@ -10,7 +10,7 @@ class ProblemByIdUseCase {
 
   ProblemByIdUseCase(this._repo);
 
-  Future<Result<ProblemByIdModel>> call(int problemId) async {
+  Future<ApiResult<ProblemByIdModel>> call(int problemId) async {
     return await _repo.fetchProblemById(problemId);
   }
 }

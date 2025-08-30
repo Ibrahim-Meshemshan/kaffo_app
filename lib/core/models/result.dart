@@ -1,13 +1,13 @@
-sealed class Result<T> {}
+sealed class ApiResult<T> {}
 
-class Success<T> extends Result<T> {
+class ApiSuccessResult<T> extends ApiResult<T> {
   T? data;
 
-  Success(this.data);
+  ApiSuccessResult(this.data);
 }
 
-class Error<T> extends Result<T> {
+class ApiErrorResult<T> extends ApiResult<T> {
   Exception? exception;
 
-  Error(this.exception);
+  ApiErrorResult(this.exception);
 }

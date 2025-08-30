@@ -9,7 +9,7 @@ class AddressUseCase {
 
   AddressUseCase(this._repo);
 
-  Future<Result<AddressResponse>> call(int addressId) async {
+  Future<ApiResult<AddressResponse>> call(int addressId) async {
     return await _repo.fetchAddress(addressId);
   }
 }

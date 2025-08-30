@@ -11,7 +11,7 @@ class CreateAddressUseCase {
 
   CreateAddressUseCase( this._repo);
 
-  Future<Result<AddressResponse>> call(AddressRequest request) async {
+  Future<ApiResult<AddressResponse>> call(AddressRequest request) async {
     return await _repo.createAddress(request);
   }
 }

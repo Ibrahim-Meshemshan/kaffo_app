@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:kaffo/core/api_manager/api_manager.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 
 @module
@@ -21,12 +23,30 @@ abstract class DioInjection {
       headers: {
         "accept": "*/*",
         "Content-Type": "application/json",
-        "Authorization":"Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJPODcyQTJBOXFNaTdfS1U3NjFUM1ZrVTk5MXR1Um1lX3FZb3lseXdybkJvIn0.eyJleHAiOjE3NTI2ODMyMjUsImlhdCI6MTc1MjY4MjMyNSwiYXV0aF90aW1lIjoxNzUyNjc3MDE1LCJqdGkiOiIzYWVmMWFjOC0wMDVhLTRmMGUtYjQ0Zi1mYzkwMmExZDhmZGYiLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjkwOTgvcmVhbG1zL2thZnUtcmVhbG0iLCJhdWQiOlsicmVhY3QtY2xpZW50IiwiYWNjb3VudCJdLCJzdWIiOiJjMzM2YzcyZS03OWEzLTQ3NzAtOTI5Ny00NTcxZjFjZDQ1MTgiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJzcHJpbmctY2xpZW50Iiwic2lkIjoiNWZhYTRiM2YtYzRhMy00ZmI2LWJkNDEtNzJlMDAwMmZhY2U2IiwiYWNyIjoiMCIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwOi8vbG9jYWxob3N0OjgwODAvKiIsImh0dHA6Ly9sb2NhbGhvc3Q6ODA4MCJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy1rYWZ1LXJlYWxtIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7InNwcmluZy1jbGllbnQiOnsicm9sZXMiOlsiUk9MRV9VU0VSIl19LCJyZWFjdC1jbGllbnQiOnsicm9sZXMiOlsiUk9MRV9VU0VSIl19LCJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6InByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJhcyBhYWEiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJpYnJhaGltQGdtYWlsLmNvbSIsImdpdmVuX25hbWUiOiJhcyIsImZhbWlseV9uYW1lIjoiYWFhIiwiZW1haWwiOiJpYnJhaGltQGdtYWlsLmNvbSJ9.wNJCxY1Hnhmjp7b0V5C1ps1fXL_f4NVOgI7qDhThFthpdb4C7f9OUhNKttNIot5Rus6wBn_yH1qE0XGsdEAHZs6qp0Uwa7Ou7nKczO9GG91abjxIbcjb2icPdnM1MppL61HV3QNMoDkjO8goQ9UA9-NFElxuoYGiKYzNlI8Vw5ir2ZxKzf6wHpq8A7CXHquOFmpXsvlOqicOBPeDRSVcq5uGSXJkyKNU1EdraHZefSZYGLKBKrDCDYgjYXeiX_3DEpsT9kEG7Ly9UlVEvIzjcwwQ0NxDjcY8lNsvFWoNcph3hf5fsAXQZ4d5qRZRq9BEtpBp2vKsfdlVy-1qqWwXSA"
+        "Authorization":"Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJqVWJHZGdnVzI4aFFmRW9PWl8zN0FGMk92U0JJX19sdFpHbGswdzBmYXMwIn0.eyJleHAiOjE3NTY1NTQyMjgsImlhdCI6MTc1NjU1MzMyOCwiYXV0aF90aW1lIjoxNzU2NTQ4MjQ1LCJqdGkiOiI2MzA1OGE0MC1jYzg5LTQwNzQtYWU2Zi1iZDM4ZmEwOWJmZjYiLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjkwOTgvcmVhbG1zL2thZnUtcmVhbG0iLCJhdWQiOlsicmVhY3QtY2xpZW50IiwiYWNjb3VudCJdLCJzdWIiOiI3ZjE0OTIyYS0xYjE1LTRlZTYtYTlkOC03MzczODdkYzFkYWMiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJzcHJpbmctY2xpZW50Iiwic2lkIjoiYjZhY2ZmNTgtMjIyNC00Y2YzLTkwN2MtZTQ5N2YxNjc1NzFlIiwiYWNyIjoiMCIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwOi8vbG9jYWxob3N0OjgwODAvKiIsImh0dHA6Ly9sb2NhbGhvc3Q6ODA4MCJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy1rYWZ1LXJlYWxtIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7InNwcmluZy1jbGllbnQiOnsicm9sZXMiOlsiUk9MRV9VU0VSIl19LCJyZWFjdC1jbGllbnQiOnsicm9sZXMiOlsiUk9MRV9VU0VSIl19LCJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6InByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJpYnJhaGltIG1uIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiaWJyYWhpbUBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiaWJyYWhpbSIsImZhbWlseV9uYW1lIjoibW4iLCJlbWFpbCI6ImlicmFoaW1AZ21haWwuY29tIn0.Ci0qoeXFWJEiNA7Ds9wS0adJv1-sri4nK9eunhlE8P7ntoaN8KEgM8HQJxZ_s3JaEpIauJQyeIYZHUtx2NIUegauRULXO4ngmngkTKIjTZJCQLUgAecPaWyGlnxNcEJw02gb86stGFJfazADp0APUGnJkFMnY-tV-tNZo_we6Z3ou7d85PNKR_b3iej4vRQBH-X-QNLB_Vr2wNSJurQLCJETLc27GEMyujRl5HIwtc66vWzGM0cwei0aCL1tiHLRxkymlsT2p9ygqx8jhIgd4lSUdMzGAmv8L2B23j4nSI9yb-YjyxiheWMdTQsn6vz7thJdVfuxAef_ZZkobaEj7w"
       },
     ),);
 
-    dio.interceptors.add(logInterceptor);
+    // customization
+    dio.interceptors.add(PrettyDioLogger(
+        requestHeader: true,
+        requestBody: true,
+        responseBody: true,
+        responseHeader: false,
+        error: true,
+        compact: true,
+        maxWidth: 90,
+        enabled: kDebugMode,
+        filter: (options, args){
+          if(options.path.contains('/posts')){
+            return false;
+          }
+          return !args.isResponse || !args.hasUint8ListData;
+        }
+    )
+    );
     return dio;
+
   }
 
   @Singleton()

@@ -1,11 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import '../../../../../core/models/result.dart';
 import '../../../../../core/utils/status.dart';
 import '../../data/models/addresses/address_response.dart';
@@ -13,6 +11,7 @@ import '../../data/models/cities/cities_model.dart';
 import '../../domain/entities/address/address_request.dart';
 import '../../domain/entities/problem/add_problem_request.dart';
 import '../cubit/problems_cubit.dart';
+import 'map_sample.dart';
 
 class AddProblemDialog extends StatefulWidget {
   const AddProblemDialog({super.key});
@@ -125,7 +124,7 @@ class _AddProblemDialogState extends State<AddProblemDialog> {
 
     final addressResult = await cubit.createAddressUseCase.call(addressRequest);
 
-    if (addressResult is! Success<AddressResponse>) {
+    if (addressResult is! ApiSuccessResult<AddressResponse>) {
       print('Address creation result: $addressResult');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('حدث خطأ في إنشاء العنوان')),
@@ -286,12 +285,9 @@ class _AddProblemDialogState extends State<AddProblemDialog> {
           const SizedBox(height: 10),
           SizedBox(
             height: 200,
-            child: GoogleMap(
-              initialCameraPosition: const CameraPosition(
-                target: LatLng(33.5130, 36.2919),
-                zoom: 11.0,
-              ),
-              onMapCreated: (controller) => _mapController.complete(controller),
+            child: MapSample(
+              initialPosition: const LatLng(33.5130, 36.2919), // دمشق مثلاً
+              markers: _markers,
               onTap: (latLng) {
                 setState(() {
                   _selectedLocation = latLng;
@@ -304,11 +300,11 @@ class _AddProblemDialogState extends State<AddProblemDialog> {
                   };
                 });
               },
-              markers: _markers,
             ),
           ),
         ],
       ),
     );
   }
+
 }

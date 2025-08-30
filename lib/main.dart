@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kaffo/core/api_manager/server_dio.dart';
 import 'package:kaffo/core/routes_manager/route_generator.dart';
 import 'package:kaffo/core/routes_manager/routes_names.dart';
 import 'package:kaffo/feature/app/problems/presentation/cubit/problems_cubit.dart';
 import 'core/app_theme/app_theme.dart';
 
 import 'core/di/di.dart';
+import 'core/storage/sharedprfrences_helper.dart';
 
-void main() {
+void main() async{
   configureDependencies();
+  ServerDio.initDio();
+  SharedPreferencesHelper.init();
   runApp(BlocProvider(
     create: (context) => getIt<ProblemsCubit>(),
     child: MyApp(),

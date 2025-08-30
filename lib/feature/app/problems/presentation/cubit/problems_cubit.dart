@@ -429,16 +429,16 @@ class ProblemsCubit extends Cubit<ProblemsState> {
   // جلب جميع المشاكل
   Future<void> fetchProblems() async {
     emit(state.copyWith(problemState: Status.loading));
-    Result<List<ProblemsContentEntity>> result = await problemsUseCase.call();
+    ApiResult<List<ProblemsContentEntity>> result = await problemsUseCase.call();
     switch (result) {
-      case Success<List<ProblemsContentEntity>>():
+      case ApiSuccessResult<List<ProblemsContentEntity>>():
         emit(
           state.copyWith(
             problemState: Status.success,
             problemList: result.data,
           ),
         );
-      case Error<List<ProblemsContentEntity>>():
+      case ApiErrorResult<List<ProblemsContentEntity>>():
         emit(
           state.copyWith(
             problemState: Status.error,
@@ -451,14 +451,14 @@ class ProblemsCubit extends Cubit<ProblemsState> {
   // جلب بيانات المستخدم
   Future<void> fetchUser(int userId) async {
     if (state.usersMap[userId] == null) {
-      Result<UserResponseDto> result = await userUseCase(userId);
+      ApiResult<UserResponseDto> result = await userUseCase(userId);
       switch (result) {
-        case Success<UserResponseDto>():
+        case ApiSuccessResult<UserResponseDto>():
           emit(state.copyWith(
             usersMap: {...state.usersMap, userId: result.data!},
             userState: Status.success,
           ));
-        case Error<UserResponseDto>():
+        case ApiErrorResult<UserResponseDto>():
           print("User fetch error for ID $userId: ${result.exception}");
           emit(state.copyWith(
             userState: Status.error,
@@ -471,14 +471,14 @@ class ProblemsCubit extends Cubit<ProblemsState> {
   // جلب عنوان معين
   Future<void> fetchAddress(int addressId) async {
     if (state.addressMap[addressId] == null) {
-      Result<AddressResponse> result = await addressUseCase(addressId);
+      ApiResult<AddressResponse> result = await addressUseCase(addressId);
       switch (result) {
-        case Success<AddressResponse>():
+        case ApiSuccessResult<AddressResponse>():
           emit(state.copyWith(
             addressMap: {...state.addressMap, addressId: result.data!},
             addressState: Status.success,
           ));
-        case Error<AddressResponse>():
+        case ApiErrorResult<AddressResponse>():
           print("Address fetch error for ID $addressId: ${result.exception}");
           emit(state.copyWith(
             addressState: Status.error,
@@ -491,12 +491,12 @@ class ProblemsCubit extends Cubit<ProblemsState> {
   // بحث عن مشكلة
   Future<void> fetchProblemById(int problemId) async {
     emit(state.copyWith(problemByIdState: Status.loading));
-    Result<ProblemByIdModel> result = await problemByIdUseCase.call(problemId);
+    ApiResult<ProblemByIdModel> result = await problemByIdUseCase.call(problemId);
     switch(result){
 
-      case Success<ProblemByIdModel>():
+      case ApiSuccessResult<ProblemByIdModel>():
         emit(state.copyWith(problemByIdState: Status.success,problemByIdList: result.data));
-      case Error<ProblemByIdModel>():
+      case ApiErrorResult<ProblemByIdModel>():
         emit(state.copyWith(problemByIdState: Status.error,problemByIdError: result.exception.toString()));
     }
   }
@@ -515,9 +515,9 @@ class ProblemsCubit extends Cubit<ProblemsState> {
     );
 
     // إرسال الطلب لإضافة المشكلة
-    Result<AddProblemResponse> result = await addProblemUseCase.call(request);
+    ApiResult<AddProblemResponse> result = await addProblemUseCase.call(request);
     switch (result) {
-      case Success<AddProblemResponse>():
+      case ApiSuccessResult<AddProblemResponse>():
       // إضافة المشكلة الجديدة إلى القائمة في الحالة
         emit(state.copyWith(
           addProblemState: Status.success,
@@ -530,7 +530,7 @@ class ProblemsCubit extends Cubit<ProblemsState> {
         ));
         break;
 
-      case Error<AddProblemResponse>():
+      case ApiErrorResult<AddProblemResponse>():
         emit(state.copyWith(
           addProblemState: Status.error,
           addProblemError: result.exception.toString(),
@@ -542,12 +542,12 @@ class ProblemsCubit extends Cubit<ProblemsState> {
   // جلب قائمة المدن
   Future<void> fetchCities() async {
     emit(state.copyWith(citiesState: Status.loading));
-    Result<List<CitiesModel>> result = await citiesUseCase.call();
+    ApiResult<List<CitiesModel>> result = await citiesUseCase.call();
     switch (result) {
-      case Success<List<CitiesModel>>():
+      case ApiSuccessResult<List<CitiesModel>>():
         emit(state.copyWith(
             citiesState: Status.success, citiesList: result.data));
-      case Error<List<CitiesModel>>():
+      case ApiErrorResult<List<CitiesModel>>():
         emit(state.copyWith(citiesState: Status.error,
             citiesError: result.exception.toString()));
     }
