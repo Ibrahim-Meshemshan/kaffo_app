@@ -1,8 +1,5 @@
-import '../error_handler/error_handler.dart';
-import '../exceptions/exceptions_impl.dart';
-import '../models/erorr_data.dart';
+import 'package:kaffo/core/error_handler/failure.dart';
 import '../models/result.dart';
-import 'package:dio/dio.dart';
 
 // class ApiExecute {
 //   static Future<Result<T>> executeApi<T>(Future<T> Function() apiCall) async {
@@ -59,7 +56,7 @@ class ApiExecute {
       var result = await apiCall.call();
       return ApiSuccessResult(result);
     } catch (error) {
-      final exception = ErrorHandler.handleError(error);
+      final exception = Failures(errorMessage: error.toString());
       return ApiErrorResult(exception);
     }
   }

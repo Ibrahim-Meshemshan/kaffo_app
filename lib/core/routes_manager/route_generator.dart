@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaffo/core/routes_manager/routes_names.dart';
 import 'package:kaffo/feature/app/myComplaints/presentation/pages/my_complaints.dart';
 import 'package:kaffo/feature/app/myContributions/presentation/pages/my_contributions.dart';
@@ -6,10 +7,14 @@ import 'package:kaffo/feature/app/myDonations/presentation/pages/my_donations.da
 import 'package:kaffo/feature/app/myVolunteering/presentation/pages/my_volunteering.dart';
 import 'package:kaffo/feature/app/problems/presentation/pages/problems_screen.dart';
 import 'package:kaffo/feature/app/statistics/presentation/pages/statistics_screen.dart';
+import 'package:kaffo/feature/app/view_prblem/presentation/pages/view_problem_screen.dart';
 import 'package:kaffo/feature/app/volunteering/presentation/pages/volunteering_screen.dart';
 import 'package:kaffo/feature/auth/logout/presentation/pages/logout_screen.dart';
 
 import '../../feature/app/home/presentation/pages/home_body_screen.dart';
+import '../../feature/app/view_prblem/presentation/cubit/address/address_cubit.dart';
+import '../../feature/app/view_prblem/presentation/cubit/category/category_cubit.dart';
+import '../../feature/app/view_prblem/presentation/cubit/view_problem_cubit.dart';
 import '../di/di.dart';
 
 class RouteGenerator {
@@ -31,13 +36,23 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) => MyContributionsScreen());
       case RoutesNames.myDonations:
         return MaterialPageRoute(builder: (context) => MyDonationsScreen());
+
+      case RoutesNames.viewProblemScreen:
+        return MaterialPageRoute(builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => getIt<ViewProblemCubit>()..getProblemById(1) ),
+              BlocProvider(create: (context) => getIt<AddressCubit>()..getAddressById(1)),
+              BlocProvider(create: (context) => getIt<CategoryCubit>()..getCategoryById(1)),
+            ],
+            child: ViewProblemScreen()));
+
+
       case RoutesNames.logout:
         return MaterialPageRoute(builder: (context) => LogoutScreen());
       default:
         return MaterialPageRoute(
           builder:
-              (_) =>
-              Scaffold(
+              (_) => Scaffold(
                 appBar: AppBar(title: const Text('No Route Found')),
                 body: const Center(child: Text('No Route Found')),
               ),

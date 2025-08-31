@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:kaffo/core/error_handler/failure.dart';
 import 'package:kaffo/core/models/result.dart';
 import 'package:kaffo/feature/app/problems/data/data_sources/problems_data_source.dart';
 import 'package:kaffo/feature/app/problems/data/models/addresses/address_response.dart';
@@ -9,7 +10,6 @@ import 'package:kaffo/feature/app/problems/data/models/problems/problem_by_id_mo
 import 'package:kaffo/feature/app/problems/domain/entities/address/address_request.dart';
 import 'package:kaffo/feature/app/problems/domain/entities/problem/problems_content_entity.dart';
 import 'package:kaffo/feature/app/problems/domain/repositories/problems_repo.dart';
-import '../../../../../core/error_handler/exception_impl.dart';
 import '../../domain/entities/problem/add_problem_request.dart';
 import '../models/user_id/user_response_dto.dart';
 
@@ -25,7 +25,8 @@ class ProblemsRepoImpl implements ProblemsRepo {
     try {
       return await _dataSource.fetchProblems();
     } on DioException catch (ex) {
-      return ApiErrorResult(ClientError(errorModel: ex.response?.data));
+      return ApiErrorResult(
+          ServerError(errorMessage: ex.response?.data));
     }
   }
 
@@ -34,7 +35,8 @@ class ProblemsRepoImpl implements ProblemsRepo {
     try {
       return await _dataSource.fetchUsers(userId);
     } on DioException catch (ex) {
-      return ApiErrorResult(ClientError(errorModel: ex.response?.data));
+      return ApiErrorResult(
+          ServerError(errorMessage: ex.response?.data));
     }
   }
 
@@ -43,7 +45,8 @@ class ProblemsRepoImpl implements ProblemsRepo {
     try {
       return await _dataSource.fetchAddress(addressId);
     } on DioException catch (ex) {
-      return ApiErrorResult(ClientError(errorModel: ex.response?.data));
+      return ApiErrorResult(
+          ServerError(errorMessage: ex.response?.data));
     }
   }
 
@@ -53,7 +56,8 @@ class ProblemsRepoImpl implements ProblemsRepo {
    try {
      return await _dataSource.addProblem(request);
    } on DioException catch (ex) {
-     return ApiErrorResult(ClientError(errorModel: ex.response?.data));
+     return ApiErrorResult(
+         ServerError(errorMessage: ex.response?.data));
    }
  }
 
@@ -62,7 +66,7 @@ class ProblemsRepoImpl implements ProblemsRepo {
    try {
      return await _dataSource.createAddress(request);
    } on DioException catch (ex) {
-     return ApiErrorResult(ClientError(errorModel: ex.response?.data));
+     return ApiErrorResult(ServerError(errorMessage: ex.response?.data));
    }
  }
 
@@ -71,7 +75,7 @@ class ProblemsRepoImpl implements ProblemsRepo {
     try {
       return await _dataSource.fetchCities();
     } on DioException catch (ex) {
-      return ApiErrorResult(ClientError(errorModel: ex.response?.data));
+      return ApiErrorResult(ServerError(errorMessage: ex.response?.data));
     }
   }
 
@@ -80,7 +84,7 @@ class ProblemsRepoImpl implements ProblemsRepo {
     try {
       return await _dataSource.fetchProblemById(problemId);
     } on DioException catch (ex) {
-      return ApiErrorResult(ClientError(errorModel: ex.response?.data));
+      return ApiErrorResult(ServerError(errorMessage: ex.response?.data));
     }
   }
 

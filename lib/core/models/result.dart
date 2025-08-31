@@ -1,3 +1,5 @@
+import '../error_handler/failure.dart';
+
 sealed class ApiResult<T> {}
 
 class ApiSuccessResult<T> extends ApiResult<T> {
@@ -7,7 +9,7 @@ class ApiSuccessResult<T> extends ApiResult<T> {
 }
 
 class ApiErrorResult<T> extends ApiResult<T> {
-  Exception? exception;
+  Failures failures;
 
-  ApiErrorResult(this.exception);
+  ApiErrorResult(this.failures);
 }

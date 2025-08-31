@@ -8,4 +8,5 @@ class RoutesNames {
   static const String myContributions = '/myContributions'; //مساهماتي
   static const String myDonations = '/myDonations'; // التبرعات
   static const String logout = '/logout';
+  static const String viewProblemScreen = '/viewProblemScreen';
 }

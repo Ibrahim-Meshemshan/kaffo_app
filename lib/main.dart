@@ -12,7 +12,7 @@ import 'core/storage/sharedprfrences_helper.dart';
 void main() async{
   configureDependencies();
   ServerDio.initDio();
-  SharedPreferencesHelper.init();
+  // SharedPreferencesHelper.init();
   runApp(BlocProvider(
     create: (context) => getIt<ProblemsCubit>(),
     child: MyApp(),

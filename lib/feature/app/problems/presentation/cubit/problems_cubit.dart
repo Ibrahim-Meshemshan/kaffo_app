@@ -442,7 +442,7 @@ class ProblemsCubit extends Cubit<ProblemsState> {
         emit(
           state.copyWith(
             problemState: Status.error,
-            problemError: result.exception.toString(),
+            problemError: result.failures.errorMessage
           ),
         );
     }
@@ -459,10 +459,10 @@ class ProblemsCubit extends Cubit<ProblemsState> {
             userState: Status.success,
           ));
         case ApiErrorResult<UserResponseDto>():
-          print("User fetch error for ID $userId: ${result.exception}");
+          print("User fetch error for ID $userId: ${result.failures.errorMessage}");
           emit(state.copyWith(
             userState: Status.error,
-            userError: result.exception.toString(),
+            userError: result.failures.errorMessage
           ));
       }
     }
@@ -479,10 +479,10 @@ class ProblemsCubit extends Cubit<ProblemsState> {
             addressState: Status.success,
           ));
         case ApiErrorResult<AddressResponse>():
-          print("Address fetch error for ID $addressId: ${result.exception}");
+          print("Address fetch error for ID $addressId: ${result.failures.errorMessage}");
           emit(state.copyWith(
             addressState: Status.error,
-            addressError: result.exception.toString(),
+            addressError: result.failures.errorMessage
           ));
       }
     }
@@ -497,7 +497,7 @@ class ProblemsCubit extends Cubit<ProblemsState> {
       case ApiSuccessResult<ProblemByIdModel>():
         emit(state.copyWith(problemByIdState: Status.success,problemByIdList: result.data));
       case ApiErrorResult<ProblemByIdModel>():
-        emit(state.copyWith(problemByIdState: Status.error,problemByIdError: result.exception.toString()));
+        emit(state.copyWith(problemByIdState: Status.error,problemByIdError: result.failures.errorMessage));
     }
   }
 
@@ -533,7 +533,7 @@ class ProblemsCubit extends Cubit<ProblemsState> {
       case ApiErrorResult<AddProblemResponse>():
         emit(state.copyWith(
           addProblemState: Status.error,
-          addProblemError: result.exception.toString(),
+          addProblemError:result.failures.errorMessage
         ));
         break;
     }
@@ -549,7 +549,7 @@ class ProblemsCubit extends Cubit<ProblemsState> {
             citiesState: Status.success, citiesList: result.data));
       case ApiErrorResult<List<CitiesModel>>():
         emit(state.copyWith(citiesState: Status.error,
-            citiesError: result.exception.toString()));
+            citiesError: result.failures.errorMessage));
     }
   }
 }

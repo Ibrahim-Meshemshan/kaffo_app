@@ -19,15 +19,15 @@ class ProblemCategoryCubit extends Cubit<ProblemCategoryState> {
     emit(state.copyWith(problemCategoryState: Status.loading));
     final result = await _repository.getProblemCategory();
     switch (result) {
-      case ApiSuccessResult<ProblemCategoryResponseModel>():
+      case ApiSuccessResult<CategoryResponseModel>():
         emit(
           state.copyWith(problemCategoryList: result.data, problemCategoryState: Status.success),
         );
 
-      case ApiErrorResult<ProblemCategoryResponseModel>():
+      case ApiErrorResult<CategoryResponseModel>():
         emit(
           state.copyWith(
-            problemCategoryError: result.exception.toString(),
+            problemCategoryError: result.failures.errorMessage.toString(),
             problemCategoryState: Status.error,
           ),
         );

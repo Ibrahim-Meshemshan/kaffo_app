@@ -6,7 +6,7 @@ class ProblemCategoryState {
 
   final Status problemCategoryState;
   final String? problemCategoryError;
-  final ProblemCategoryResponseModel? problemCategoryList;
+  final CategoryResponseModel? problemCategoryList;
 
   const ProblemCategoryState({
     this.problemCategoryState = Status.initial,
@@ -17,7 +17,7 @@ class ProblemCategoryState {
   ProblemCategoryState copyWith({
     Status? problemCategoryState,
     String? problemCategoryError,
-    ProblemCategoryResponseModel? problemCategoryList,
+    CategoryResponseModel? problemCategoryList,
   }) {
     return ProblemCategoryState(
       problemCategoryState: problemCategoryState ?? this.problemCategoryState,

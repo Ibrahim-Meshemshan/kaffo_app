@@ -5,22 +5,22 @@
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-List<ProblemCategoryResponseModel> problemCategoryResponseModelFromJson(String str) => List<ProblemCategoryResponseModel>.from(json.decode(str).map((x) => ProblemCategoryResponseModel.fromJson(x)));
+List<CategoryResponseModel> problemCategoryResponseModelFromJson(String str) => List<CategoryResponseModel>.from(json.decode(str).map((x) => CategoryResponseModel.fromJson(x)));
 
-String problemCategoryResponseModelToJson(List<ProblemCategoryResponseModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String problemCategoryResponseModelToJson(List<CategoryResponseModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class ProblemCategoryResponseModel {
+class CategoryResponseModel {
   int id;
   String name;
   int govId;
 
-  ProblemCategoryResponseModel({
+  CategoryResponseModel({
     required this.id,
     required this.name,
     required this.govId,
   });
 
-  factory ProblemCategoryResponseModel.fromJson(Map<String, dynamic> json) => ProblemCategoryResponseModel(
+  factory CategoryResponseModel.fromJson(Map<String, dynamic> json) => CategoryResponseModel(
     id: json["id"],
     name: json["name"],
     govId: json["govId"],

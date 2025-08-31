@@ -6,10 +6,10 @@ import '../../models/problems/problem-category_response_model.dart';
 
 @singleton
 class ProblemCategoryDataSource {
-  Future<ProblemCategoryResponseModel> getProblemCategory() async {
+  Future<CategoryResponseModel> getProblemCategory() async {
     final response = await ServerDio.dioInstance.get(
         'problem-categories'
     );
-    return ProblemCategoryResponseModel.fromJson(response.data);
+    return CategoryResponseModel.fromJson(response.data);
   }
 }
