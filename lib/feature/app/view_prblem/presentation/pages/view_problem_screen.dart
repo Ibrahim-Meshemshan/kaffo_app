@@ -6,7 +6,9 @@ import '../cubit/view_problem_cubit.dart';
 import '../widget/problem_deatils_widget.dart';
 
 class ViewProblemScreen extends StatelessWidget {
-  const ViewProblemScreen({super.key});
+  final int problemId;
+
+  const ViewProblemScreen({super.key, required this.problemId});
 
   @override
   Widget build(BuildContext context) {

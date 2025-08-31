@@ -45,16 +45,21 @@ import '../../feature/app/view_prblem/data/data_source/address_data_source.dart'
     as _i32;
 import '../../feature/app/view_prblem/data/data_source/category_data_source.dart'
     as _i132;
+import '../../feature/app/view_prblem/data/data_source/photo_data_source.dart'
+    as _i542;
 import '../../feature/app/view_prblem/data/data_source/problem_byId.dart'
     as _i387;
 import '../../feature/app/view_prblem/data/repo/address_repo.dart' as _i161;
 import '../../feature/app/view_prblem/data/repo/category_repo.dart' as _i984;
+import '../../feature/app/view_prblem/data/repo/photo_repo.dart' as _i321;
 import '../../feature/app/view_prblem/data/repo/problem_by_id_repo.dart'
     as _i63;
 import '../../feature/app/view_prblem/presentation/cubit/address/address_cubit.dart'
     as _i417;
 import '../../feature/app/view_prblem/presentation/cubit/category/category_cubit.dart'
     as _i534;
+import '../../feature/app/view_prblem/presentation/cubit/photo/photo_cubit.dart'
+    as _i538;
 import '../../feature/app/view_prblem/presentation/cubit/view_problem_cubit.dart'
     as _i49;
 import '../api_manager/api_di.dart' as _i285;
@@ -91,6 +96,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i387.ProblemByIDDataSource>(
       () => _i387.ProblemByIDDataSource(gh<_i361.Dio>()),
     );
+    gh.singleton<_i542.PhotoDataSource>(
+      () => _i542.PhotoDataSource(gh<_i361.Dio>()),
+    );
     gh.factory<_i984.CategoryRepo>(
       () => _i984.CategoryRepo(gh<_i132.CategoryDataSource>()),
     );
@@ -100,12 +108,16 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i396.ProblemCategoryCubit>(
       () => _i396.ProblemCategoryCubit(gh<_i56.ProblemCategoryRepository>()),
     );
+    gh.factory<_i321.PhotoRepo>(
+      () => _i321.PhotoRepo(gh<_i542.PhotoDataSource>()),
+    );
     gh.factory<_i49.ViewProblemCubit>(
       () => _i49.ViewProblemCubit(gh<_i63.ProblemByIdRepo>()),
     );
     gh.factory<_i296.ProblemsDataSource>(
       () => _i296.ProblemsDataSourceImpl(gh<_i266.RestClient>()),
     );
+    gh.factory<_i538.PhotoCubit>(() => _i538.PhotoCubit(gh<_i321.PhotoRepo>()));
     gh.factory<_i161.AddressRepo>(
       () => _i161.AddressRepo(gh<_i32.AddressDataSource>()),
     );
