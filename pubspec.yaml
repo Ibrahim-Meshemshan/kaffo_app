@@ -29,6 +29,8 @@ dependencies:
   cached_network_image: ^3.4.1
   font_awesome_flutter: ^10.8.0
   flutter_localization: ^0.3.2
+  flutter_appauth: ^9.0.1
+  flutter_secure_storage: ^9.0.0
 
 dev_dependencies:
   flutter_test:
