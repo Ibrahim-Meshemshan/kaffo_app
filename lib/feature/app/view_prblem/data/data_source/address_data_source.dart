@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../../core/api_manager/server_dio.dart';
-import '../../../../../core/app_consts/api_constant.dart';
+import '../../../../../core/api_manager/api_constant.dart';
 import '../../../problems/data/models/addresses/address_response.dart';
 import '../../../problems/data/models/cities/cities_model.dart';
 

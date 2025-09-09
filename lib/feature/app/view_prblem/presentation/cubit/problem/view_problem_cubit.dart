@@ -2,10 +2,10 @@ import 'package:bloc/bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 
-import '../../../../../core/models/result.dart';
-import '../../../../../core/utils/status.dart';
-import '../../../problems/data/models/problems/problem_by_id_model.dart';
-import '../../data/repo/problem_by_id_repo.dart';
+import '../../../../../../core/models/result.dart';
+import '../../../../../../core/utils/status.dart';
+import '../../../../problems/data/models/problems/problem_by_id_model.dart';
+import '../../../data/repo/problem_by_id_repo.dart';
 
 part 'view_problem_state.dart';
 

@@ -22,13 +22,14 @@ class DrawerScreen extends StatelessWidget {
               style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
                 color: AppColors.black,
                 fontSize: 18,
+                fontFamily: 'Cairo'
               ),
             ),
             accountEmail: Text(
               'ibrahimeshmeshan@gmail.com',
               style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
                 color: AppColors.black,
-                fontSize: 15,
+                fontSize: 15, fontFamily: 'Cairo'
               ),
             ),
             currentAccountPicture: CircleAvatar(
@@ -38,70 +39,70 @@ class DrawerScreen extends StatelessWidget {
           ),
           ListTile(
             leading: const FaIcon(FontAwesomeIcons.house, size: 20),
-            title: const Text('الرئيسية'),
+            title: const Text('الرئيسية',style: TextStyle(fontFamily: 'Cairo'),),
             onTap: () {
               Navigator.pushNamed(context, RoutesNames.homeBody);
             },
           ),
           ListTile(
             leading: const FaIcon(FontAwesomeIcons.triangleExclamation, size: 20),
-            title: const Text('المشكلات'),
+            title: const Text('المشكلات',style: TextStyle(fontFamily: 'Cairo'),),
             onTap: () {
               Navigator.pushNamed(context, RoutesNames.problems);
             },
           ),
-          ListTile(
-            leading: const FaIcon(FontAwesomeIcons.handHoldingHeart, size: 20),
-            title: const Text('التطوع'),
-            onTap: () {
-              Navigator.pushNamed(context, RoutesNames.volunteer);
-            },
-          ),
-          ListTile(
-            leading: const FaIcon(FontAwesomeIcons.chartBar, size: 20),
-            title: const Text('الاحصائيات'),
-            onTap: () {
-              Navigator.pushNamed(context, RoutesNames.statistics);
-            },
-          ),
-          ExpansionTile(
-            leading: const FaIcon(FontAwesomeIcons.peopleGroup, size: 20),
-            title: const Text('مشاركاتي'),
-            children: [
-              ListTile(
-                leading: const FaIcon(FontAwesomeIcons.fileCircleExclamation, size: 20),
-                title: const Text('الشكاوي'),
-                onTap: () {
-                  Navigator.pushNamed(context, RoutesNames.myComplaints);
-                },
-              ),
-              ListTile(
-                leading: const FaIcon(FontAwesomeIcons.handsHelping, size: 20),
-                title: const Text('التطوع'),
-                onTap: () {
-                  Navigator.pushNamed(context, RoutesNames.myVolunteering);
-                },
-              ),
-              ListTile(
-                leading: const FaIcon(FontAwesomeIcons.handshake, size: 20),
-                title: const Text('المساهمات'),
-                onTap: () {
-                  Navigator.pushNamed(context, RoutesNames.myContributions);
-                },
-              ),
-              ListTile(
-                leading: const FaIcon(FontAwesomeIcons.gift, size: 20),
-                title: const Text('التبرعات'),
-                onTap: () {
-                  Navigator.pushNamed(context, RoutesNames.myDonations);
-                },
-              ),
-            ],
-          ),
+          // ListTile(
+          //   leading: const FaIcon(FontAwesomeIcons.handHoldingHeart, size: 20),
+          //   title: const Text('التطوع'),
+          //   onTap: () {
+          //     Navigator.pushNamed(context, RoutesNames.volunteer);
+          //   },
+          // ),
+          // ListTile(
+          //   leading: const FaIcon(FontAwesomeIcons.chartBar, size: 20),
+          //   title: const Text('الاحصائيات'),
+          //   onTap: () {
+          //     Navigator.pushNamed(context, RoutesNames.statistics);
+          //   },
+          // ),
+          // ExpansionTile(
+          //   leading: const FaIcon(FontAwesomeIcons.peopleGroup, size: 20),
+          //   title: const Text('مشاركاتي'),
+          //   children: [
+          //     ListTile(
+          //       leading: const FaIcon(FontAwesomeIcons.fileCircleExclamation, size: 20),
+          //       title: const Text('الشكاوي'),
+          //       onTap: () {
+          //         Navigator.pushNamed(context, RoutesNames.myComplaints);
+          //       },
+          //     ),
+          //     ListTile(
+          //       leading: const FaIcon(FontAwesomeIcons.handsHelping, size: 20),
+          //       title: const Text('التطوع'),
+          //       onTap: () {
+          //         Navigator.pushNamed(context, RoutesNames.myVolunteering);
+          //       },
+          //     ),
+          //     ListTile(
+          //       leading: const FaIcon(FontAwesomeIcons.handshake, size: 20),
+          //       title: const Text('المساهمات'),
+          //       onTap: () {
+          //         Navigator.pushNamed(context, RoutesNames.myContributions);
+          //       },
+          //     ),
+          //     ListTile(
+          //       leading: const FaIcon(FontAwesomeIcons.gift, size: 20),
+          //       title: const Text('التبرعات'),
+          //       onTap: () {
+          //         Navigator.pushNamed(context, RoutesNames.myDonations);
+          //       },
+          //     ),
+          //   ],
+          // ),
           const Divider(),
           ListTile(
             leading: const FaIcon(FontAwesomeIcons.signOutAlt, size: 20),
-            title: const Text('تسجيل الخروج'),
+            title: const Text('تسجيل الخروج',style: TextStyle(fontFamily: 'Cairo'),),
             onTap: () {
               Navigator.pushNamed(context, RoutesNames.logout);
             },

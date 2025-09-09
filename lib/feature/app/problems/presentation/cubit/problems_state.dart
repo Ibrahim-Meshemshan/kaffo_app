@@ -13,7 +13,6 @@ class ProblemsState extends Equatable {
   final Status userState;
   final String? userError;
 
-
   final Map<int, AddressResponse> addressMap;
   final Status addressState;
   final String? addressError;
@@ -23,13 +22,17 @@ class ProblemsState extends Equatable {
   final AddProblemResponse? addProblemResponse;
 
   final Status createProblemState;
-  final ProblemsContentEntity? createProblemStateList;
   final String? createProblemStateError;
 
   final Status problemByIdState;
   final ProblemByIdModel? problemByIdList;
   final String? problemByIdError;
 
+  final Status photoUploadState;
+  final String? photoUploadError;
+
+  final Status updateProblemState;
+  final String? updateProblemError;
 
   ProblemsState({
     this.problemState = Status.initial,
@@ -38,10 +41,6 @@ class ProblemsState extends Equatable {
     this.usersMap = const {},
     this.userState = Status.initial,
     this.userError,
-    this.problemByIdList,
-    this.problemByIdState = Status.initial,
-    this.problemByIdError,
-
     this.addressMap = const {},
     this.addressState = Status.initial,
     this.addressError,
@@ -49,11 +48,17 @@ class ProblemsState extends Equatable {
     this.addProblemError,
     this.addProblemResponse,
     this.createProblemState = Status.initial,
-    this.createProblemStateList,
     this.createProblemStateError,
     this.citiesError,
     this.citiesState = Status.initial,
-    this.citiesList
+    this.citiesList,
+    this.problemByIdList,
+    this.problemByIdState = Status.initial,
+    this.problemByIdError,
+    this.photoUploadState = Status.initial,
+    this.photoUploadError,
+    this.updateProblemState = Status.initial,
+    this.updateProblemError,
   });
 
   ProblemsState copyWith({
@@ -73,11 +78,14 @@ class ProblemsState extends Equatable {
     String? addProblemError,
     AddProblemResponse? addProblemResponse,
     Status? createProblemState,
-    ProblemsContentEntity? createProblemStateList,
     String? createProblemStateError,
     Status? problemByIdState,
     ProblemByIdModel? problemByIdList,
     String? problemByIdError,
+    Status? photoUploadState,
+    String? photoUploadError,
+    Status? updateProblemState,
+    String? updateProblemError,
   }) {
     return ProblemsState(
       problemState: problemState ?? this.problemState,
@@ -96,41 +104,42 @@ class ProblemsState extends Equatable {
       addProblemError: addProblemError ?? this.addProblemError,
       addProblemResponse: addProblemResponse ?? this.addProblemResponse,
       createProblemState: createProblemState ?? this.createProblemState,
-      createProblemStateList: createProblemStateList ??
-          this.createProblemStateList,
-      createProblemStateError: createProblemStateError ??
-          this.createProblemStateError,
+      createProblemStateError: createProblemStateError ?? this.createProblemStateError,
       problemByIdState: problemByIdState ?? this.problemByIdState,
       problemByIdList: problemByIdList ?? this.problemByIdList,
       problemByIdError: problemByIdError ?? this.problemByIdError,
+      photoUploadState: photoUploadState ?? this.photoUploadState,
+      photoUploadError: photoUploadError ?? this.photoUploadError,
+      updateProblemState: updateProblemState ?? this.updateProblemState,
+      updateProblemError: updateProblemError ?? this.updateProblemError,
     );
   }
 
   @override
-  // TODO: implement props
-  List<Object?> get props =>
-      [
-        problemState,
-        problemList,
-        problemError,
-        citiesState,
-        citiesList,
-        citiesError,
-        usersMap,
-        userState,
-        userError,
-        addressMap,
-        addressState,
-        addressError,
-        addProblemState,
-        addProblemError,
-        addProblemResponse,
-        createProblemState,
-        createProblemStateList,
-        createProblemStateError,
-        problemByIdState,
-        problemByIdList,
-        problemByIdError,
-      ];
-
+  List<Object?> get props => [
+    problemState,
+    problemList,
+    problemError,
+    citiesState,
+    citiesList,
+    citiesError,
+    usersMap,
+    userState,
+    userError,
+    addressMap,
+    addressState,
+    addressError,
+    addProblemState,
+    addProblemError,
+    addProblemResponse,
+    createProblemState,
+    createProblemStateError,
+    problemByIdState,
+    problemByIdList,
+    problemByIdError,
+    photoUploadState,
+    photoUploadError,
+    updateProblemState,
+    updateProblemError,
+  ];
 }

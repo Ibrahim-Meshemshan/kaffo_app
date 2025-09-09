@@ -11,8 +11,8 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: AppColors.appBarColor,
-      title: Text('AppLocalization.of(context)!.kaffo'),
+      backgroundColor: AppColors.black,
+      title: Text('AppLocalization.of(context)!.kaffo',style: TextStyle(color: Colors.white),),
       actions: [
         IconButton(
           icon: const Icon(Icons.notifications_none),

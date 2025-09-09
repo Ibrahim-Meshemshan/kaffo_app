@@ -60,8 +60,8 @@ import '../../feature/app/view_prblem/presentation/cubit/category/category_cubit
     as _i534;
 import '../../feature/app/view_prblem/presentation/cubit/photo/photo_cubit.dart'
     as _i538;
-import '../../feature/app/view_prblem/presentation/cubit/view_problem_cubit.dart'
-    as _i49;
+import '../../feature/app/view_prblem/presentation/cubit/problem/view_problem_cubit.dart'
+    as _i479;
 import '../api_manager/api_di.dart' as _i285;
 import '../api_manager/api_manager.dart' as _i266;
 
@@ -73,6 +73,7 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final dioInjection = _$DioInjection();
+    gh.factory<String>(() => _i285.DioInjection.token);
     gh.singleton<_i361.LogInterceptor>(() => dioInjection.provideLogger());
     gh.singleton<_i808.ProblemCategoryDataSource>(
       () => _i808.ProblemCategoryDataSource(),
@@ -93,11 +94,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i132.CategoryDataSource>(
       () => _i132.CategoryDataSource(gh<_i361.Dio>()),
     );
-    gh.singleton<_i387.ProblemByIDDataSource>(
-      () => _i387.ProblemByIDDataSource(gh<_i361.Dio>()),
-    );
     gh.singleton<_i542.PhotoDataSource>(
       () => _i542.PhotoDataSource(gh<_i361.Dio>()),
+    );
+    gh.singleton<_i387.ProblemByIDDataSource>(
+      () => _i387.ProblemByIDDataSource(gh<_i361.Dio>()),
     );
     gh.factory<_i984.CategoryRepo>(
       () => _i984.CategoryRepo(gh<_i132.CategoryDataSource>()),
@@ -111,8 +112,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i321.PhotoRepo>(
       () => _i321.PhotoRepo(gh<_i542.PhotoDataSource>()),
     );
-    gh.factory<_i49.ViewProblemCubit>(
-      () => _i49.ViewProblemCubit(gh<_i63.ProblemByIdRepo>()),
+    gh.factory<_i479.ViewProblemCubit>(
+      () => _i479.ViewProblemCubit(gh<_i63.ProblemByIdRepo>()),
     );
     gh.factory<_i296.ProblemsDataSource>(
       () => _i296.ProblemsDataSourceImpl(gh<_i266.RestClient>()),
@@ -160,6 +161,8 @@ extension GetItInjectableX on _i174.GetIt {
         createAddressUseCase: gh<_i401.CreateAddressUseCase>(),
         citiesUseCase: gh<_i495.CitiesUseCase>(),
         problemByIdUseCase: gh<_i943.ProblemByIdUseCase>(),
+        photoRepo: gh<_i321.PhotoRepo>(),
+        dio: gh<_i361.Dio>(),
       ),
     );
     return this;

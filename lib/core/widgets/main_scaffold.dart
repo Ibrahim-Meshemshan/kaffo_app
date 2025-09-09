@@ -12,8 +12,8 @@ class MainScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.appBarColor,
-        title: Text(title ?? 'كفو'),
+        backgroundColor: AppColors.appBarColor.withOpacity(0.3),
+        title: Text(title ?? 'كفو',style: TextStyle(fontFamily: 'Cairo',color: Colors.black),),
       ),
       drawer: const DrawerScreen(),
       body: body,

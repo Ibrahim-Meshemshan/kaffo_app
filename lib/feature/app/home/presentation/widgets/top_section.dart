@@ -51,7 +51,7 @@ class TopSection extends StatelessWidget {
                 onTap: () => Navigator.pushNamed(context, RoutesNames.problems),
                 child: const Text(
                   'فتح التطبيق',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600,fontFamily: 'Cairo'),
                 ),
               ),
             ),

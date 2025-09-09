@@ -10,36 +10,34 @@ class MyContributionsScreen extends StatelessWidget {
 
     Widget content = Scaffold(
       backgroundColor: Colors.grey[50],
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(
-              'إحصائيات الأنشطة الخاصة بك',
-              style: TextStyle(
-                color: Colors.grey[800],
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Icon(
-              Icons.bar_chart,
-              color: Colors.grey[700],
-              size: 24,
-            ),
-          ],
-        ),
-      ),
       body: Directionality(
         textDirection: TextDirection.rtl,
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
           child: Column(
+
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    'إحصائيات الأنشطة الخاصة بك',
+                    style: TextStyle(
+                      color: Colors.grey[800],
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Icon(
+                    Icons.bar_chart,
+                    color: Colors.grey[700],
+                    size: 24,
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
               Text(
                 'إحصائيات عام 2025',
                 style: TextStyle(

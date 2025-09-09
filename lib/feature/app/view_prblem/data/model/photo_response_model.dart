@@ -14,14 +14,14 @@ class PhotoResponseModel {
   int problemId;
   String s3Key;
   DateTime photoDate;
-  dynamic progressId;
+  final int? progressId;
 
   PhotoResponseModel({
     required this.id,
     required this.problemId,
     required this.s3Key,
     required this.photoDate,
-    required this.progressId,
+     this.progressId,
   });
 
   factory PhotoResponseModel.fromJson(Map<String, dynamic> json) => PhotoResponseModel(

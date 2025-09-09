@@ -36,16 +36,16 @@ class _AddProblemWidgetState extends State<AddProblemWidget> {
               onTap: () => _showAddProblemDialog(context),
               child: Container(
                 alignment: Alignment.center,
-                height: 35,
-                width: 100,
+                padding: EdgeInsets.symmetric(vertical: 12,horizontal: 5),
                 decoration: BoxDecoration(
                   color: AppColors.black,
-                  borderRadius: BorderRadius.circular(25),
+                  borderRadius: BorderRadius.circular(5),
                 ),
                 child: Text(
-                  '+ مشكلة جديدة',
+                  ' مشكلة جديدة',
                   style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
                     color: Colors.white,
+                    fontFamily: 'Cairo'
                   ),
                 ),
               ),
@@ -59,7 +59,7 @@ class _AddProblemWidgetState extends State<AddProblemWidget> {
                   hintText: 'ابحث عن مشكلة بالعنوان (مثال: مشكلة الاختبار)...',
                   prefixIcon: const Icon(Icons.search),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide.none,
                   ),
                   filled: true,
@@ -266,7 +266,9 @@ void _showAddProblemDialog(BuildContext context) {
     builder: (context) {
       return BlocProvider.value(
         value: BlocProvider.of<ProblemsCubit>(context),
-        child: const AddProblemDialog(),
+        child: Directionality(
+            textDirection: TextDirection.rtl,
+            child: const AddProblemDialog()),
       );
     },
   );

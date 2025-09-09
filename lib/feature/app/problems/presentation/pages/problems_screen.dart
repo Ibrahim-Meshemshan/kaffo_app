@@ -20,7 +20,9 @@ class ProblemsScreen extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            const AddProblemWidget(),
+            Directionality(
+                textDirection: TextDirection.rtl,
+                child: const AddProblemWidget()),
 
             BlocProvider(
               create: (context) => getIt<ProblemsCubit>()..fetchProblems(),
@@ -53,12 +55,14 @@ class ProblemsScreen extends StatelessWidget {
                           crossAxisCount: 1,
                           crossAxisSpacing: 8.0,
                           mainAxisSpacing: 8.0,
-                          childAspectRatio: 0.75,
+                          childAspectRatio: 0.65,
                         ),
                         itemCount: state.problemList!.length,
                         itemBuilder: (context, index) {
                           final problem = state.problemList![index];
-                          return ProblemCardWidget(problem: problem);
+                          return Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: ProblemCardWidget(problem: problem));
                         },
                       ),
                     );

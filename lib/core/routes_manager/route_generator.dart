@@ -15,7 +15,7 @@ import '../../feature/app/home/presentation/pages/home_body_screen.dart';
 import '../../feature/app/view_prblem/presentation/cubit/address/address_cubit.dart';
 import '../../feature/app/view_prblem/presentation/cubit/category/category_cubit.dart';
 import '../../feature/app/view_prblem/presentation/cubit/photo/photo_cubit.dart';
-import '../../feature/app/view_prblem/presentation/cubit/view_problem_cubit.dart';
+import '../../feature/app/view_prblem/presentation/cubit/problem/view_problem_cubit.dart';
 import '../di/di.dart';
 
 class RouteGenerator {
@@ -39,11 +39,11 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) => MyDonationsScreen());
 
       case RoutesNames.viewProblemScreen:
-        final problemId = settings.arguments as int? ?? 1; // Get problemId from arguments or default to 1
+        final problemId = settings.arguments as int; // Get problemId from arguments or default to 1
         return MaterialPageRoute(
           builder: (context) => MultiBlocProvider(
             providers: [
-              BlocProvider(create: (context) => getIt<ViewProblemCubit>()..getProblemById(problemId)),
+              BlocProvider(create: (context) => getIt<ViewProblemCubit>()), //
               BlocProvider(create: (context) => getIt<AddressCubit>()),
               BlocProvider(create: (context) => getIt<CategoryCubit>()),
               BlocProvider(create: (context) => getIt<PhotoCubit>()),

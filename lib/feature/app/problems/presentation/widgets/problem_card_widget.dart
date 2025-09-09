@@ -6,6 +6,7 @@ import 'package:kaffo/core/routes_manager/routes_names.dart';
 import 'package:kaffo/feature/app/problems/domain/entities/problem/problems_content_entity.dart';
 import 'package:kaffo/feature/app/problems/presentation/cubit/problems_cubit.dart';
 import '../../../../../core/utils/status.dart';
+import '../../../view_prblem/presentation/cubit/problem/view_problem_cubit.dart';
 
 
 class ProblemCardWidget extends StatefulWidget {
@@ -40,18 +41,19 @@ class _ProblemCardWidgetState extends State<ProblemCardWidget> {
       }
 
     return Card(
+      color: Colors.white,
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(5),
       ),
-      elevation: 4,
+      elevation: 8,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
             height: MediaQuery.of(context).size.height * 0.25,
             decoration: BoxDecoration(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(5)),
               color: Colors.grey[300],
             ),
             child: const Center(
@@ -88,6 +90,7 @@ class _ProblemCardWidgetState extends State<ProblemCardWidget> {
                             '${user.firstName ?? 'مستخدم'} ${user.lastName ?? 'غير معروف'}',
                             style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.bold,
+                                fontFamily: 'Cairo',
                               fontSize: 16
                             ),
                           ),
@@ -95,6 +98,7 @@ class _ProblemCardWidgetState extends State<ProblemCardWidget> {
                           Text(
                             formattedDate,
                             style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
+                              fontFamily: 'Cairo',
                               color: Colors.grey[600],
                             ),
                           ),
@@ -114,6 +118,7 @@ class _ProblemCardWidgetState extends State<ProblemCardWidget> {
                   widget.problem.title ?? 'لا يوجد عنوان',
                   style: AppTheme.lightTheme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
+                      fontFamily: 'Cairo',
                     fontSize: 16,
                     color: Colors.black
                   ),
@@ -121,7 +126,7 @@ class _ProblemCardWidgetState extends State<ProblemCardWidget> {
                 const SizedBox(height: 8),
                 Text(
                   widget.problem.description ?? 'لا يوجد وصف',
-                  style: TextStyle(fontSize: 16,color: Colors.black)
+                  style: TextStyle(fontSize: 16,color: Colors.black ,fontFamily: 'Cairo',)
                 ),
 
                 SizedBox(height: 10,),
@@ -136,31 +141,35 @@ class _ProblemCardWidgetState extends State<ProblemCardWidget> {
                       return Center(child: Text('خطأ: ${state.addressError ??
                           'غير معروف'}', style: TextStyle(color: Colors.red),));
                     } else if (state.addressState == Status.success) {
-                      return Row(
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(address?.description ?? '',
                             style: AppTheme.lightTheme.textTheme.titleMedium
                                 ?.copyWith(
+                            fontFamily: 'Cairo',
                                 color: Colors.black
                             ),),
-                          SizedBox(width: 10,),
+                          SizedBox(height: 15,),
                           Container(
                             alignment: Alignment.center,
-                            width: 80,
-                            height: 30,
+                            width: 100,
+                            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
                             decoration: BoxDecoration(
-                              color: AppColors.black,
-                              borderRadius: BorderRadius.circular(5)
+                                color: AppColors.black,
+                                borderRadius: BorderRadius.circular(5)
                             ),
                             child: Text(address?.city ?? '',
                                 textAlign: TextAlign.center ,
                                 style: AppTheme.lightTheme.textTheme.titleMedium
                                     ?.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold
+                                    fontFamily: 'Cairo',
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold
                                 )),
                           )
                         ],
+
                       );
                     }
                     return SizedBox();
@@ -168,12 +177,17 @@ class _ProblemCardWidgetState extends State<ProblemCardWidget> {
                 ),
 
 
-                SizedBox(height: 50),
+                SizedBox(height: 30),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, RoutesNames.viewProblemScreen);
+                      Navigator.pushNamed(
+                        context,
+                        RoutesNames.viewProblemScreen,
+                        arguments: widget.problem.id,
+                      );
+                      // context.read<ViewProblemCubit>().getProblemById(widget.problem.id!);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
@@ -185,7 +199,7 @@ class _ProblemCardWidgetState extends State<ProblemCardWidget> {
                     ),
                     child: const Text(
                       'المزيد من التفاصيل',
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(fontSize: 16,fontFamily: 'Cairo',),
                     ),
                   ),
                 ),

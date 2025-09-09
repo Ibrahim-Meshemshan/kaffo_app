@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:kaffo/core/app_consts/api_constant.dart';
+import 'package:kaffo/core/api_manager/api_constant.dart';
 import 'package:kaffo/feature/app/problems/data/models/cities/cities_model.dart';
 import 'package:kaffo/feature/app/problems/data/models/problems/problem_by_id_model.dart';
 import 'package:kaffo/feature/app/problems/data/models/user_id/user_response_dto.dart';

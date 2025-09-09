@@ -9,11 +9,19 @@ class AddProblemRequest {
   final int categoryId;
   final num? addressId;
 
+
+
+  final List<String> photoUrls;
+
   AddProblemRequest({
     required this.title,
     required this.description,
     required this.categoryId,
     this.addressId,
+
+
+
+    required this.photoUrls,
   });
 
   factory AddProblemRequest.fromJson(Map<String, dynamic> json) =>

@@ -33,7 +33,8 @@ dependencies:
   fl_chart: ^1.0.0
   geolocator: ^14.0.2
   permission_handler: ^12.0.1
-
+  carousel_slider: ^5.1.1
+  image_picker: ^1.2.0
 
 dev_dependencies:
   flutter_test:
@@ -56,3 +57,16 @@ flutter:
   generate: true
   assets:
     - assets/images/
+
+
+
+  fonts:
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/Cairo-Regular.ttf
+        - asset: assets/fonts/Cairo-Bold.ttf
+        - asset: assets/fonts/Cairo-Medium.ttf
+        - asset: assets/fonts/Cairo-Light.ttf
+        - asset: assets/fonts/Cairo-ExtraLight.ttf
+        - asset: assets/fonts/Cairo-Black.ttf
+          weight: 700

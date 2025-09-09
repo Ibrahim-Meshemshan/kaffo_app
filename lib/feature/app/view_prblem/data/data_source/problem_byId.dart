@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:kaffo/core/api_manager/server_dio.dart';
 
-import '../../../../../core/app_consts/api_constant.dart';
+import '../../../../../core/api_manager/api_constant.dart';
 import '../../../problems/data/models/problems/problem_by_id_model.dart';
 
 @singleton

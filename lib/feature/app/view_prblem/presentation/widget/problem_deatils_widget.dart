@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import '../../../../../core/app_consts/api_constant.dart';
+import '../../../../../core/api_manager/api_constant.dart';
 import '../../../../../core/utils/status.dart';
 import '../../../problems/data/models/problems/problem_by_id_model.dart';
 import '../../data/model/photo_response_model.dart';
@@ -27,17 +28,12 @@ class _ProblemDetailWidgetState extends State<ProblemDetailWidget> {
   }
 
   void _loadData() {
-    // Load photos
     if (widget.problem.id != null) {
       context.read<PhotoCubit>().getProblemPhotos(widget.problem.id!.toInt());
     }
-
-    // Load category
     if (widget.problem.categoryId != null) {
       context.read<CategoryCubit>().getCategoryById(widget.problem.categoryId!.toInt());
     }
-
-    // Load address
     if (widget.problem.addressId != null) {
       context.read<AddressCubit>().getAddressById(widget.problem.addressId!.toInt());
     }
@@ -47,278 +43,157 @@ class _ProblemDetailWidgetState extends State<ProblemDetailWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('تفاصيل المشكلة'),
+        iconTheme: IconThemeData(color: Colors.black),
+        title: Text(
+          'تفاصيل المشكلة رقم ${widget.problem.id}',
+          style:  TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
-        backgroundColor: Colors.blue[700],
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.grey,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDetailCard(
-              title: 'عنوان المشكلة',
-              content: widget.problem.title ?? 'لا يوجد عنوان',
-              icon: Icons.title,
-            ),
-
-            const SizedBox(height: 16),
-
-            _buildDetailCard(
-              title: 'وصف المشكلة',
-              content: widget.problem.description ?? 'لا يوجد وصف',
-              icon: Icons.description,
-            ),
-
-            const SizedBox(height: 16),
-
-            _buildCategorySection(),
-
-            const SizedBox(height: 16),
-
-            _buildAddressSection(),
-
-            const SizedBox(height: 16),
-
-            _buildPhotosSection(),
-
-            const SizedBox(height: 16),
-
-            _buildAdditionalDetails(),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showUploadDialog(),
-        tooltip: 'إضافة صور',
-        child: const Icon(Icons.add_photo_alternate),
-      ),
-    );
-  }
-
-  Widget _buildDetailCard({
-    required String title,
-    required String content,
-    required IconData icon,
-  }) {
-    return Card(
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(icon, color: Colors.blue[700], size: 20),
-                const SizedBox(width: 8),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              content,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.black54,
-                height: 1.4,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCategorySection() {
-    return BlocBuilder<CategoryCubit, CategoryState>(
-      builder: (context, categoryState) {
-        return Card(
-          elevation: 3,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Row(
-                  children: [
-                    Icon(Icons.category, color: Colors.green, size: 20),
-                    SizedBox(width: 8),
-                    Text(
-                      'التصنيف',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                _buildStateContent(
-                  state: categoryState.categoryState,
-                  error: categoryState.categoryError,
-                  content: Text(categoryState.category?.name ?? 'غير محدد'),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildAddressSection() {
-    return BlocBuilder<AddressCubit, AddressState>(
-      builder: (context, addressState) {
-        return Card(
-          elevation: 3,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Row(
-                  children: [
-                    Icon(Icons.location_on, color: Colors.red, size: 20),
-                    SizedBox(width: 8),
-                    Text(
-                      'العنوان',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                if (widget.problem.addressId == null)
-                  const Text(
-                    'لا يوجد عنوان محدد',
-                    style: TextStyle(color: Colors.grey),
-                  )
-                else
-                  _buildStateContent(
-                    state: addressState.addressState,
-                    error: addressState.addressError,
-                    content: addressState.address != null
-                        ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('المدينة: ${addressState.address!.city}'),
-                        if (addressState.address!.description != null &&
-                            addressState.address!.description!.isNotEmpty)
-                          Text('الوصف: ${addressState.address!.description}'),
-                      ],
-                    )
-                        : const Text('غير محدد'),
-                  ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildPhotosSection() {
-    return BlocBuilder<PhotoCubit, PhotoState>(
-      builder: (context, photoState) {
-        return Card(
-          elevation: 3,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Row(
-                  children: [
-                    Icon(Icons.photo_library, color: Colors.orange, size: 20),
-                    SizedBox(width: 8),
-                    Text(
-                      'الصور',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                _buildStateContent(
+            // الصور بالسلايدر مع border أسود
+            BlocBuilder<PhotoCubit, PhotoState>(
+              builder: (context, photoState) {
+                return _buildStateContent(
                   state: photoState.photoState,
                   error: photoState.photoError,
-                  content: _buildPhotosGrid(photoState.photos),
-                ),
-              ],
+                  content: _buildCarousel(photoState.photos),
+                );
+              },
             ),
-          ),
-        );
-      },
+
+            const SizedBox(height: 16),
+
+            // عنوان المشكلة بجانب النص
+            RichText(
+              text: TextSpan(
+                style: const TextStyle(fontSize: 18, color: Colors.black),
+                children: [
+                  const TextSpan(
+                      text: 'عنوان المشكلة: ',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(text: widget.problem.title ?? 'لا يوجد عنوان'),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+
+            // وصف المشكلة
+            Text(
+              'وصف المشكلة: ${widget.problem.description ?? 'لا يوجد وصف'}',
+              style: const TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 12),
+
+            // التصنيف
+            BlocBuilder<CategoryCubit, CategoryState>(
+              builder: (context, categoryState) {
+                return _buildStateContent(
+                  state: categoryState.categoryState,
+                  error: categoryState.categoryError,
+                  content: Text(
+                    'التصنيف: ${categoryState.category?.name ?? 'غير محدد'}',
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 12),
+
+            // العنوان
+            BlocBuilder<AddressCubit, AddressState>(
+              builder: (context, addressState) {
+                if (widget.problem.addressId == null) {
+                  return const Text('العنوان: لا يوجد عنوان محدد',
+                      style: TextStyle(fontSize: 16));
+                }
+
+                return _buildStateContent(
+                  state: addressState.addressState,
+                  error: addressState.addressError,
+                  content: addressState.address != null
+                      ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('المدينة: ${addressState.address!.city}',
+                          style: const TextStyle(fontSize: 16)),
+                      if (addressState.address!.description?.isNotEmpty ?? false)
+                        Text('الوصف: ${addressState.address!.description}',
+                            style: const TextStyle(fontSize: 16)),
+                    ],
+                  )
+                      : const Text('العنوان: غير محدد', style: TextStyle(fontSize: 16)),
+                );
+              },
+            ),
+            const SizedBox(height: 12),
+
+            // معلومات إضافية
+            Text('رقم المشكلة: #${widget.problem.id}', style: const TextStyle(fontSize: 16)),
+            if (widget.problem.categoryId != null)
+              Text('رقم التصنيف: ${widget.problem.categoryId}', style: const TextStyle(fontSize: 16)),
+            if (widget.problem.addressId != null)
+              Text('رقم العنوان: ${widget.problem.addressId}', style: const TextStyle(fontSize: 16)),
+            Text('تاريخ الإنشاء: ${DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now())}',
+                style: const TextStyle(fontSize: 16)),
+          ],
+        ),
+      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _showUploadDialog,
+      //   tooltip: 'إضافة صور',
+      //   child: const Icon(Icons.add_photo_alternate),
+      // ),
     );
   }
 
-  Widget _buildPhotosGrid(List<PhotoResponseModel> photos) {
+  Widget _buildCarousel(List<PhotoResponseModel> photos) {
     if (photos.isEmpty) {
-      return const Center(
-        child: Text(
-          'لا توجد صور متاحة',
-          style: TextStyle(color: Colors.grey),
-        ),
+      return Container(
+        height: 220,
+        color: Colors.grey[200],
+        child: const Center(
+            child: Text('لا توجد صور متاحة', style: TextStyle(color: Colors.grey))),
       );
     }
 
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
-        childAspectRatio: 1,
-      ),
+    return CarouselSlider.builder(
       itemCount: photos.length,
-      itemBuilder: (context, index) {
-        final photo = photos[index];
-        final imageUrl = '${ApiConstant.baseUrl}photos/${photo.s3Key}';
+      options: CarouselOptions(
+        height: 250,
+        enlargeCenterPage: true,
+        autoPlay: true,
+        viewportFraction: 0.9,
+      ),
+      itemBuilder: (context, index, realIndex) {
 
+      final photo = photos[index];
+        final imageUrl = '${ApiConstant.baseUrl}photos/https://kafu-bucket.s3.amazonaws.com/problems/2653/photo/4e3fe889-11aa-480d-9968-0e13f77614ca'; //
         return GestureDetector(
           onTap: () => _showPhotoDialog(photo),
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: Colors.grey[200],
+              border: Border.all(color: Colors.black, width: 2),
+              borderRadius: BorderRadius.circular(12),
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(10),
               child: CachedNetworkImage(
                 imageUrl: imageUrl,
                 fit: BoxFit.cover,
+                width: double.infinity,
                 placeholder: (context, url) => Container(
                   color: Colors.grey[300],
-                  child: const Center(
-                    child: Icon(Icons.photo, size: 30, color: Colors.grey),
-                  ),
+                  child: const Center(child: CircularProgressIndicator()),
                 ),
                 errorWidget: (context, url, error) => Container(
                   color: Colors.grey[300],
-                  child: const Center(
-                    child: Icon(Icons.broken_image, size: 30, color: Colors.grey),
-                  ),
+                  child: const Icon(Icons.broken_image, size: 50, color: Colors.grey),
                 ),
               ),
             ),
@@ -328,95 +203,16 @@ class _ProblemDetailWidgetState extends State<ProblemDetailWidget> {
     );
   }
 
-  Widget _buildAdditionalDetails() {
-    return Card(
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Row(
-              children: [
-                Icon(Icons.info, color: Colors.purple, size: 20),
-                SizedBox(width: 8),
-                Text(
-                  'معلومات إضافية',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            _buildInfoRow('رقم المشكلة', '#${widget.problem.id}'),
-            if (widget.problem.categoryId != null)
-              _buildInfoRow('رقم التصنيف', widget.problem.categoryId.toString()),
-            if (widget.problem.addressId != null)
-              _buildInfoRow('رقم العنوان', widget.problem.addressId.toString()),
-            _buildInfoRow(
-              'تاريخ الإنشاء',
-              DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildInfoRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 100,
-            child: Text(
-              '$label:',
-              style: const TextStyle(
-                fontWeight: FontWeight.w500,
-                color: Colors.black87,
-                fontSize: 14,
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              value,
-              style: const TextStyle(
-                color: Colors.black54,
-                fontSize: 14,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStateContent({
-    required Status state,
-    required String? error,
-    required Widget content,
-  }) {
+  Widget _buildStateContent({required Status state, required String? error, required Widget content}) {
     switch (state) {
       case Status.loading:
         return const Center(child: CircularProgressIndicator());
       case Status.error:
-        return Text(
-          'خطأ: $error',
-          style: const TextStyle(color: Colors.red),
-        );
+        return Text('خطأ: $error', style: const TextStyle(color: Colors.red));
       case Status.success:
         return content;
-      case Status.initial:
       default:
-        return const Text('جاري التحميل...');
+        return const SizedBox.shrink();
     }
   }
 
@@ -427,13 +223,10 @@ class _ProblemDetailWidgetState extends State<ProblemDetailWidget> {
         title: const Text('رفع الصور'),
         content: const Text('اختر الصور التي تريد رفعها'),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('إلغاء'),
-          ),
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('إلغاء')),
           TextButton(
             onPressed: () {
-              // TODO: Implement photo upload logic
+              // TODO: upload logic
               Navigator.pop(context);
             },
             child: const Text('رفع'),
@@ -444,67 +237,12 @@ class _ProblemDetailWidgetState extends State<ProblemDetailWidget> {
   }
 
   void _showPhotoDialog(PhotoResponseModel photo) {
-    final imageUrl = 'https://kafu-bucket.s3.eu-north-1.amazonaws.com/problems/2662/photo/84c4315b-d848-48db-a478-b64615ab9cfb?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20250831T055242Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAQKGGXSKNCPSES4FD%2F20250831%2Feu-north-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=c711b545f40d94b1e26a84d494e94875164bbdfafae8f159c5f083457d98e2e0';
-
+    // final imageUrl = '${ApiConstant.baseUrl}photos/problems/2653/photo/4e3fe889-11aa-480d-9968-0e13f77614ca';
+    final imageUrl = 'https://kafu-bucket.s3.amazonaws.com/problems/2653/photo/4e3fe889-11aa-480d-9968-0e13f77614ca';
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.9,
-          height: MediaQuery.of(context).size.height * 0.7,
-          child: Column(
-            children: [
-              AppBar(
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                automaticallyImplyLeading: false,
-                actions: [
-                  IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close, color: Colors.black),
-                  ),
-                ],
-              ),
-              Expanded(
-                child: CachedNetworkImage(
-                  imageUrl: imageUrl,
-                  fit: BoxFit.contain,
-                  placeholder: (context, url) => const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                  errorWidget: (context, url, error) => const Center(
-                    child: Icon(Icons.error, size: 50, color: Colors.red),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      'تاريخ الرفع: ${DateFormat('yyyy-MM-dd').format(photo.photoDate)}',
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        context.read<PhotoCubit>().deletePhoto(
-                          widget.problem.id!.toInt(),
-                          photo.id,
-                        );
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        'حذف',
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+        child: CachedNetworkImage(imageUrl: imageUrl, fit: BoxFit.contain),
       ),
     );
   }

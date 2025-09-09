@@ -28,7 +28,11 @@ class MyApp extends StatelessWidget {
       // localizationsDelegates: AppLocalizations.localizationsDelegates,
       // supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
+      theme: AppTheme.lightTheme.copyWith(
+        textTheme: Theme.of(context).textTheme.apply(
+          fontFamily: "Cairo",
+        ),
+      ),
       onGenerateRoute: RouteGenerator.generateRoutes,
       // initialRoute: RoutesNames.problems,
     );
