@@ -5,13 +5,13 @@ class ApiConstant {
 
   // todo: test test 10.0.2.2
 
-  static const String baseUrl = 'http://192.168.1.4:8080/api/v1/';
+  static const String baseUrl = 'http://192.168.1.6:8080/api/v1/';
   static const String problems = 'problems';
   static const String userId = 'users/';
   static const String addresses = 'addresses/';
 
 
-  //192.168.1.9 // last ip for mobile
+  //192.168.1.4 // last ip for mobile
 }
 //192.168.43.140
 //172.27.240.1

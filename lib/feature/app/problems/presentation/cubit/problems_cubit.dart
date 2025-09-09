@@ -216,27 +216,49 @@ class ProblemsCubit extends Cubit<ProblemsState> {
   }
 
   // رفع ملف إلى S3 باستخدام Dio
+  // في ProblemsCubit
   Future<void> uploadFileToS3(String presignedUrl, File file) async {
     try {
-      final fileBytes = await file.readAsBytes();
+      // قراءة ملف الصورة ك bytes
+      final bytes = await file.readAsBytes();
+
+      // تحديد نوع المحتوى من امتداد الملف
+      final contentType = _getContentType(file.path);
+
 
       final response = await dio.put(
         presignedUrl,
-        data: fileBytes,
+        data: bytes,
         options: Options(
           headers: {
-            'Content-Type': 'image/${file.path.split('.').last}',
+            'Content-Type': contentType,
           },
         ),
       );
 
       if (response.statusCode != 200) {
-        throw Exception('فشل رفع الملف: ${response.statusCode}');
+        throw Exception('فشل في رفع الصورة: ${response.statusCode}');
       }
-    } on DioException catch (e) {
-      throw Exception('فشل رفع الملف: ${e.message}');
+
+      print('تم رفع الصورة بنجاح إلى S3');
     } catch (e) {
-      throw Exception('فشل رفع الملف: $e');
+      print('Error uploading to S3: $e');
+      throw Exception('فشل في رفع الصورة: $e');
+    }
+  }
+
+  String _getContentType(String path) {
+    final extension = path.split('.').last.toLowerCase();
+    switch (extension) {
+      case 'jpg':
+      case 'jpeg':
+        return 'image/jpeg';
+      case 'png':
+        return 'image/png';
+      case 'gif':
+        return 'image/gif';
+      default:
+        return 'application/octet-stream';
     }
   }
 
@@ -311,7 +333,7 @@ class ProblemsCubit extends Cubit<ProblemsState> {
         title: title,
         description: description,
         categoryId: categoryId,
-        addressId: addressResult.data!.id,
+        addressId: addressResult.data!.id!.toInt(),
         photoUrls: [],
       );
 
@@ -328,7 +350,7 @@ class ProblemsCubit extends Cubit<ProblemsState> {
           images.length,
           'image/${images[0].path.split('.').last}',
         );
-
+        print('Presigned data: $presignedData');
         await Future.wait(
           images.asMap().entries.map((entry) {
             final index = entry.key;
@@ -346,7 +368,7 @@ class ProblemsCubit extends Cubit<ProblemsState> {
             title: title,
             description: description,
             categoryId: categoryId,
-            addressId: addressResult.data!.id,
+            addressId: addressResult.data!.id!.toInt(),
             photoUrls: photoUrls,
           ),
         );

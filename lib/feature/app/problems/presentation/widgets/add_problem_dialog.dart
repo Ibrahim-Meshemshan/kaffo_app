@@ -35,7 +35,7 @@ class _AddProblemDialogState extends State<AddProblemDialog> {
   String? _addressInput;
   LatLng? _selectedLocation;
   Set<Marker> _markers = {};
-  List<File> _selectedImages = [];
+  final List<File> _selectedImages = [];
 
   @override
   void initState() {
@@ -145,7 +145,7 @@ class _AddProblemDialogState extends State<AddProblemDialog> {
         title: _problemTitle!,
         description: _problemDescription!,
         categoryId: 1,
-        addressId: addressResult.data!.id,
+        addressId: addressResult.data!.id ?? 1,
         photoUrls: [],
       );
 
@@ -160,38 +160,36 @@ class _AddProblemDialogState extends State<AddProblemDialog> {
 
       // 3. رفع الصور إن وجدت
       if (_selectedImages.isNotEmpty) {
-        final presignedData = await cubit.getPresignedUrls(
-          problemResult.data!.id!.toInt(),
-          _selectedImages.length,
-          'image/${_selectedImages[0].path.split('.').last}',
-        );
+        try {
+          // الحصول على Presigned URLs
+          final presignedData = await cubit.getPresignedUrls(
+            problemResult.data!.id!.toInt(),
+            _selectedImages.length,
+            'image/jpeg',
+          );
 
-        await Future.wait(
-          _selectedImages.asMap().entries.map((entry) {
-            final index = entry.key;
-            final file = entry.value;
-            return cubit.uploadFileToS3(presignedData[index].presignedUrl, file);
-          }),
-        );
+          print('Presigned URLs received: ${presignedData.length}');
 
-        final photoUrls = presignedData.map((item) => item.s3Key).toList();
+          // رفع كل صورة إلى S3 باستخدام PUT
+          for (int i = 0; i < _selectedImages.length; i++) {
+            final presignedUrl = presignedData[i].presignedUrl;
+            final file = _selectedImages[i];
 
-        // تحديث المشكلة بالصور
-        await cubit.updateProblem(
-          id: problemResult.data!.id!.toInt(),
-          data: AddProblemRequest(
-            title: _problemTitle!,
-            description: _problemDescription!,
-            categoryId: 1,
-            addressId: addressResult.data!.id,
-            photoUrls: photoUrls,
-          ),
-        );
-      } else {
-        // إعلام المستخدم بعدم وجود صور
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('تم إنشاء الشكوى ولكن لم يتم إرفاق صور')),
-        );
+            print('Uploading image ${i + 1} to: $presignedUrl');
+
+            await cubit.uploadFileToS3(presignedUrl, file);
+
+            print('Image ${i + 1} uploaded successfully');
+          }
+
+          print('All images uploaded successfully');
+
+        } catch (e) {
+          print('Error uploading images: $e');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('فشل في رفع الصور: ${e.toString()}')),
+          );
+        }
       }
 
       // إعلام المستخدم بالنجاح

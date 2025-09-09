@@ -10,7 +10,7 @@ part of 'api_manager.dart';
 
 class _RestClient implements RestClient {
   _RestClient(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??= 'http://192.168.1.4:8080/api/v1/';
+    baseUrl ??= 'http://192.168.1.6:8080/api/v1/';
   }
 
   final Dio _dio;

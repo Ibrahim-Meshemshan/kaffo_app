@@ -7,7 +7,7 @@ class AddProblemResponse {
   num? id;
   String? title;
   String? description;
-  bool? isReal;
+  bool isReal = true;
   bool? forContribution;
   bool? forDonation;
   String? submissionDate;
@@ -17,7 +17,7 @@ class AddProblemResponse {
   num? submittedByUserId;
   num? categoryId;
 
-  AddProblemResponse({this.id, this.title, this.description, this.isReal, this.forContribution, this.forDonation, this.submissionDate, this.status, this.rejectionReason, this.addressId, this.submittedByUserId, this.categoryId});
+  AddProblemResponse({this.id, this.title, this.description, required this.isReal, this.forContribution, this.forDonation, this.submissionDate, this.status, this.rejectionReason, this.addressId, this.submittedByUserId, this.categoryId});
 
   factory AddProblemResponse.fromJson(Map<String, dynamic> json) => _$AddProblemResponseFromJson(json);
 

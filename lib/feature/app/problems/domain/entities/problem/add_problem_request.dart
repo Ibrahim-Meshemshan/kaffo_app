@@ -7,7 +7,7 @@ class AddProblemRequest {
   final String title;
   final String description;
   final int categoryId;
-  final num? addressId;
+  final num addressId;
 
 
 
@@ -17,7 +17,7 @@ class AddProblemRequest {
     required this.title,
     required this.description,
     required this.categoryId,
-    this.addressId,
+    required this.addressId,
 
 
 
