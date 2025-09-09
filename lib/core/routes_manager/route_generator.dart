@@ -5,6 +5,7 @@ import 'package:kaffo/feature/app/myContributions/presentation/pages/my_contribu
 import 'package:kaffo/feature/app/myDonations/presentation/pages/my_donations.dart';
 import 'package:kaffo/feature/app/myVolunteering/presentation/pages/my_volunteering.dart';
 import 'package:kaffo/feature/app/problems/presentation/pages/problems_screen.dart';
+import 'package:kaffo/feature/app/profile/presentation/pages/profile_screen.dart';
 import 'package:kaffo/feature/app/statistics/presentation/pages/statistics_screen.dart';
 import 'package:kaffo/feature/app/volunteering/presentation/pages/volunteering_screen.dart';
 import 'package:kaffo/feature/auth/logout/presentation/pages/logout_screen.dart';
@@ -33,11 +34,12 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) => MyDonationsScreen());
       case RoutesNames.logout:
         return MaterialPageRoute(builder: (context) => LogoutScreen());
+      case RoutesNames.profile:
+        return MaterialPageRoute(builder: (context) => ProfileScreen());
       default:
         return MaterialPageRoute(
           builder:
-              (_) =>
-              Scaffold(
+              (_) => Scaffold(
                 appBar: AppBar(title: const Text('No Route Found')),
                 body: const Center(child: Text('No Route Found')),
               ),

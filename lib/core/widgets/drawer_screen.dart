@@ -44,10 +44,25 @@ class DrawerScreen extends StatelessWidget {
             },
           ),
           ListTile(
+            leading: const FaIcon(FontAwesomeIcons.house, size: 20),
+            title: const Text('الملف الشخصي'),
+            onTap: () {
+              Navigator.pushNamed(context, RoutesNames.profile);
+            },
+          ),
+
+          ListTile(
             leading: const FaIcon(FontAwesomeIcons.triangleExclamation, size: 20),
             title: const Text('المشكلات'),
             onTap: () {
               Navigator.pushNamed(context, RoutesNames.problems);
+            },
+          ),
+          ListTile(
+            leading: const FaIcon(FontAwesomeIcons.triangleExclamation, size: 20),
+            title: const Text('ألبروفايل'),
+            onTap: () {
+              Navigator.pushNamed(context, RoutesNames.profile);
             },
           ),
           ListTile(
